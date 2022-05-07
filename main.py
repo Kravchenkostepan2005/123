@@ -7,11 +7,8 @@ def multiply(x, y):
 def divide(x, y):
     return x / y
 
-print("Select operation.")
-print("1.Add")
-print("2.Subtract")
-print("3.Multiply")
-print("4.Divide")
+print("Select operation: 1 - add, 2 - subtract, 3 - multiply, 4 - divide: ")
+
 
 while True:
     choice = input("Enter choice(1/2/3/4): ")
@@ -20,33 +17,27 @@ while True:
         print("invalid input")
 
     else:
-        num1 = float(input("Enter first number: "))
-        num2 = float(input("Enter second number: "))
+        num1 = int(input("Enter first number: "))
+        num2 = int(input("Enter second number: "))
 
-        if choice == "1":
-            print(num1, "+", num2, "=", add(num1, num2))
-        elif choice == "2":
-            print(num1, "-", num2, "=", subtract(num1, num2))
-        elif choice == "3":
-            print(num1, "*", num2, "=", multiply(num1, num2))
-        elif choice == "4":
-            print(num1, "/", num2, "=", divide(num1, num2))
+    if choice == "1":
+        print(num1, "+", num2, "=", add(num1, num2))
+    elif choice == "2":
+        print(num1, "-", num2, "=", subtract(num1, num2))
+    elif choice == "3":
+        print(num1, "*", num2, "=", multiply(num1, num2))
+    elif choice == "4":
+        print(num1, "/", num2, "=", divide(num1, num2))
         next_calculation = input("Let's do next calculation? (yes/no): ")
         if next_calculation == "no":
             break
 
-
-class MyCustomError(Exception):
-    def __init__(self, *args):
-        if args:
-            self.message = args[0]
-        else:
-            self.message = None
-    def __str__(self):
-        print("calling str")
-        if self.message:
-            return "MyCustomError, {0}".format(self.message)
-        else:
-            return "MyCustomError has been raised"
-
-raise MyCustomError
+def check(num1, num2):
+    if num1.isdigit():
+        print(num1)
+    else:
+        print("mistake")
+    if num2.isdigit():
+        print(num2)
+    else:
+        print("mistake")
