@@ -13,7 +13,7 @@ def multiply(x: int, y: int) -> int:
     return x * y
 
 
-def divide(x: int, y: int) -> int:
+def divide(x: int, y: int) -> float:
     "Function to divide"
     return x / y
 
