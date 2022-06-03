@@ -14,5 +14,9 @@ class Test(unittest.TestCase):
     def test_div(self):
         self.assertEqual(lesson.divide(15, 5), 3)
 
+    def test_divide_raises_error(self):
+        with self.assertRaises(ValueError):
+            lesson.divide(10, 0)
+
 if __name__ == "__main__":
     unittest.main()
