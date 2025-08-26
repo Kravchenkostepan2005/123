@@ -1,0 +1,226 @@
+<RootScreen>:
+    ScreenManager:
+        id: sm
+        PlanScreen:
+            name: "plan"
+        WorkoutScreen:
+            name: "workout"
+        AnalyticsScreen:
+            name: "analytics"
+        SettingsScreen:
+            name: "settings"
+
+<TopBar@BoxLayout>:
+    size_hint_y: None
+    height: dp(48)
+    padding: dp(8)
+    spacing: dp(8)
+    canvas.before:
+        Color:
+            rgba: .1,.1,.1,1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    Button:
+        text: "План"
+        on_release: app.switch_screen("plan")
+    Button:
+        text: "Тренировка"
+        on_release: app.switch_screen("workout")
+    Button:
+        text: "Аналитика"
+        on_release: app.switch_screen("analytics")
+    Button:
+        text: "Настройки"
+        on_release: app.switch_screen("settings")
+
+<PlanScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        TopBar:
+        BoxLayout:
+            orientation: 'vertical'
+            padding: dp(8)
+            spacing: dp(8)
+            Label:
+                text: root.week_label
+                size_hint_y: None
+                height: self.texture_size[1] + dp(8)
+            BoxLayout:
+                size_hint_y: None
+                height: dp(44)
+                spacing: dp(8)
+                Button:
+                    text: "< Неделя"
+                    on_release: root.change_week(-7)
+                Button:
+                    text: "+ День"
+                    on_release: root.add_extra_day()
+                Button:
+                    text: "Неделя >"
+                    on_release: root.change_week(7)
+            RecycleView:
+                viewclass: 'PlanDayRow'
+                data: root.days_data
+                RecycleBoxLayout:
+                    default_size: None, dp(60)
+                    default_size_hint: 1, None
+                    size_hint_y: None
+                    height: self.minimum_height
+                    orientation: 'vertical'
+
+<PlanDayRow>:
+    size_hint_y: None
+    height: dp(64)
+    spacing: dp(8)
+    padding: dp(8)
+    Label:
+        text: root.title if hasattr(root, 'title') else ''
+        size_hint_x: .3
+    Button:
+        text: "Добавить упражнение"
+        on_release: app.add_exercise_to_plan(root.plan_day_id if hasattr(root, 'plan_day_id') else 0)
+    Button:
+        text: "Открыть"
+        on_release: app.open_day_workout(root.plan_day_id if hasattr(root, 'plan_day_id') else 0)
+
+<WorkoutScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        TopBar:
+        ScrollView:
+            BoxLayout:
+                orientation: 'vertical'
+                padding: dp(8)
+                spacing: dp(8)
+                size_hint_y: None
+                height: self.minimum_height
+                BoxLayout:
+                    size_hint_y: None
+                    height: dp(48)
+                    spacing: dp(8)
+                    Label:
+                        text: "Дата: " + root.date_label
+                    TextInput:
+                        id: body_weight
+                        hint_text: "Текущий вес (кг)"
+                        input_filter: 'float'
+                        size_hint_x: .4
+                        on_text_validate: root.save_body_weight(self.text)
+                Label:
+                    size_hint_y: None
+                    height: dp(28)
+                    text: root.total_label
+                Button:
+                    size_hint_y: None
+                    height: dp(44)
+                    text: "+ Упражнение из плана"
+                    on_release: root.add_from_plan()
+                RecycleView:
+                    viewclass: 'WorkoutExerciseCard'
+                    data: root.exercises_data
+                    RecycleBoxLayout:
+                        default_size: None, dp(160)
+                        default_size_hint: 1, None
+                        size_hint_y: None
+                        height: self.minimum_height
+                        orientation: 'vertical'
+
+<WorkoutExerciseCard>:
+    orientation: 'vertical'
+    padding: dp(8)
+    spacing: dp(4)
+    Label:
+        text: root.title if hasattr(root, 'title') else ''
+        size_hint_y: None
+        height: dp(24)
+    RecycleView:
+        viewclass: 'WorkoutSetRow'
+        data: root.sets if hasattr(root, 'sets') else []
+        RecycleBoxLayout:
+            default_size: None, dp(44)
+            default_size_hint: 1, None
+            size_hint_y: None
+            height: self.minimum_height
+            orientation: 'vertical'
+    Button:
+        size_hint_y: None
+        height: dp(36)
+        text: "+ Подход"
+        on_release: app.add_set_to_exercise(root.workout_exercise_id if hasattr(root, 'workout_exercise_id') else 0)
+
+<WorkoutSetRow>:
+    size_hint_y: None
+    height: dp(44)
+    spacing: dp(6)
+    TextInput:
+        text: root.reps if hasattr(root, 'reps') else ''
+        input_filter: 'int'
+        hint_text: 'Повторы'
+        on_text_validate: app.update_set(root.set_id if hasattr(root, 'set_id') else 0, self.text, None, None)
+    TextInput:
+        text: root.weight if hasattr(root, 'weight') else ''
+        input_filter: 'float'
+        hint_text: 'Вес'
+        on_text_validate: app.update_set(root.set_id if hasattr(root, 'set_id') else 0, None, self.text, None)
+    Spinner:
+        text: root.unit if hasattr(root, 'unit') else 'kg'
+        values: ['kg', 'lb']
+        size_hint_x: .3
+        on_text: app.update_set(root.set_id if hasattr(root, 'set_id') else 0, None, None, self.text)
+    Button:
+        text: '✕'
+        size_hint_x: .2
+        on_release: app.delete_set(root.set_id if hasattr(root, 'set_id') else 0)
+
+<AnalyticsScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        TopBar:
+        BoxLayout:
+            orientation: 'vertical'
+            padding: dp(8)
+            spacing: dp(8)
+            BoxLayout:
+                size_hint_y: None
+                height: dp(44)
+                Spinner:
+                    id: exercise_spinner
+                    text: 'Выберите упражнение'
+                    values: app.exercise_names
+                    on_text: root.select_exercise(self.text)
+                Spinner:
+                    id: period_spinner
+                    text: 'Период'
+                    values: ['Неделя','Месяц','3 месяца','6 месяцев','Год']
+                    on_text: root.select_period(self.text)
+            BoxLayout:
+                id: graph_box
+                orientation: 'vertical'
+                size_hint_y: 1
+                padding: dp(8)
+                spacing: dp(8)
+                RecycleView:
+                    viewclass: 'Label'
+                    data: [{ 'text': f"{d}: {w} кг" } for d,w in app.analytics_points]
+                    RecycleBoxLayout:
+                        default_size: None, dp(24)
+                        default_size_hint: 1, None
+                        size_hint_y: None
+                        height: self.minimum_height
+                        orientation: 'vertical'
+
+<SettingsScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        TopBar:
+        BoxLayout:
+            padding: dp(8)
+            spacing: dp(8)
+            Spinner:
+                text: app.default_unit
+                values: ['kg', 'lb']
+                on_text: app.update_default_unit(self.text)
+            Label:
+                text: 'Единицы по умолчанию'
+
