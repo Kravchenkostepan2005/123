@@ -7,8 +7,8 @@ from kivy.uix.spinner import Spinner
 from kivy.uix.button import Button
 from kivy.uix.label import Label
 
-from ..services.repository import Repository
-from ..services.analytics import exercise_volume_timeseries, workout_total_by_primary_group
+from training_diary.services.repository import Repository
+from training_diary.services.analytics import exercise_volume_timeseries, workout_total_by_primary_group
 
 # Matplotlib canvas
 try:

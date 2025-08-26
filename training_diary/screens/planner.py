@@ -9,8 +9,8 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.uix.button import Button
 from kivy.uix.label import Label
 
-from ..services.repository import Repository
-from ..utils.dates import today_monday, week_range_str, add_days
+from training_diary.services.repository import Repository
+from training_diary.utils.dates import today_monday, week_range_str, add_days, shift_weeks
 
 
 DAY_NAMES = [
@@ -52,7 +52,6 @@ class PlannerScreen(Screen):
 		self.add_widget(root)
 
 	def _shift_week(self, delta_weeks: int):
-		from ..utils.dates import shift_weeks
 		self.current_week_monday = shift_weeks(self.current_week_monday, delta_weeks)
 		self._load_or_create_week()
 

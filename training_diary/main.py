@@ -2,9 +2,9 @@ from kivy.app import App
 from kivy.uix.screenmanager import ScreenManager, NoTransition
 from kivy.core.window import Window
 
-from screens.planner import PlannerScreen
-from screens.workout import WorkoutScreen
-from screens.analytics import AnalyticsScreen
+from training_diary.screens.planner import PlannerScreen
+from training_diary.screens.workout import WorkoutScreen
+from training_diary.screens.analytics import AnalyticsScreen
 
 
 class RootScreenManager(ScreenManager):

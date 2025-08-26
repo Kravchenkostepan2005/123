@@ -2,8 +2,8 @@ from dataclasses import dataclass
 from typing import List, Optional, Tuple, Dict, Any
 from datetime import date
 
-from .db import get_db
-from ..utils.units import kg_to_lb
+from training_diary.services.db import get_db
+from training_diary.utils.units import kg_to_lb
 
 
 @dataclass

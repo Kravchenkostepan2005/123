@@ -12,8 +12,8 @@ from kivy.uix.textinput import TextInput
 from kivy.uix.spinner import Spinner
 from kivy.uix.popup import Popup
 
-from ..services.repository import Repository
-from ..utils.units import lb_to_kg, kg_to_lb, format_weight
+from training_diary.services.repository import Repository
+from training_diary.utils.units import lb_to_kg, kg_to_lb, format_weight
 
 
 class WorkoutScreen(Screen):

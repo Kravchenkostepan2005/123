@@ -1,6 +1,6 @@
 import sqlite3
 from pathlib import Path
-from typing import Iterable, Optional
+from typing import Iterable, Optional, Union
 
 DB_PATH = Path(__file__).resolve().parent.parent / "training_diary.db"
 
@@ -65,13 +65,13 @@ CREATE TABLE IF NOT EXISTS sets (
 
 
 class Database:
-	def __init__(self, path: Optional[Path] = None):
+	def __init__(self, path: Optional[Union[Path, str]] = None):
 		self.path = Path(path) if path else DB_PATH
 		self.path.parent.mkdir(parents=True, exist_ok=True)
 		self._ensure_schema()
 
 	def connect(self) -> sqlite3.Connection:
-		conn = sqlite3.connect(self.path)
+		conn = sqlite3.connect(str(self.path))
 		conn.row_factory = sqlite3.Row
 		return conn
 

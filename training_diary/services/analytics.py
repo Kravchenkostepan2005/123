@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 from typing import List, Tuple, Optional, Dict
 
-from .db import get_db
+from training_diary.services.db import get_db
 
 
 def _to_date(s: str):
