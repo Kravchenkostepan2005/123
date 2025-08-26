@@ -1,0 +1,67 @@
+#:kivy 2.3.0
+
+<PlannerScreen>:
+	BoxLayout:
+		orientation: 'vertical'
+		Label:
+			text: 'Планировщик недели'
+			font_size: '20sp'
+			bold: True
+		BoxLayout:
+			size_hint_y: None
+			height: '56dp'
+			spacing: '8dp'
+			padding: '8dp'
+			Button:
+				text: 'План'
+				on_release: app.root.current = 'planner'
+			Button:
+				text: 'Тренировка'
+				on_release: app.root.current = 'workout'
+			Button:
+				text: 'Аналитика'
+				on_release: app.root.current = 'analytics'
+
+<WorkoutScreen>:
+	BoxLayout:
+		orientation: 'vertical'
+		Label:
+			text: 'Экран тренировки'
+			font_size: '20sp'
+			bold: True
+		BoxLayout:
+			size_hint_y: None
+			height: '56dp'
+			spacing: '8dp'
+			padding: '8dp'
+			Button:
+				text: 'План'
+				on_release: app.root.current = 'planner'
+			Button:
+				text: 'Тренировка'
+				on_release: app.root.current = 'workout'
+			Button:
+				text: 'Аналитика'
+				on_release: app.root.current = 'analytics'
+
+<AnalyticsScreen>:
+	BoxLayout:
+		orientation: 'vertical'
+		Label:
+			text: 'Аналитика'
+			font_size: '20sp'
+			bold: True
+		BoxLayout:
+			size_hint_y: None
+			height: '56dp'
+			spacing: '8dp'
+			padding: '8dp'
+			Button:
+				text: 'План'
+				on_release: app.root.current = 'planner'
+			Button:
+				text: 'Тренировка'
+				on_release: app.root.current = 'workout'
+			Button:
+				text: 'Аналитика'
+				on_release: app.root.current = 'analytics'
