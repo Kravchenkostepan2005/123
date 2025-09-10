@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <limits.h>
+#include <ctype.h>
 
 static int read_non_negative_input(int argc, char **argv, unsigned long long *out_value) {
 	if (out_value == NULL) {
@@ -22,14 +23,30 @@ static int read_non_negative_input(int argc, char **argv, unsigned long long *ou
 
 	printf("Введите неотрицательное целое число (0..20): ");
 	fflush(stdout);
-	long long input = -1;
-	if (scanf("%lld", &input) != 1) {
+	char buffer[256];
+	if (fgets(buffer, sizeof buffer, stdin) == NULL) {
 		return -1;
 	}
-	if (input < 0) {
+	char *ptr = buffer;
+	while (*ptr != '\0' && isspace((unsigned char)*ptr)) {
+		++ptr;
+	}
+	char *end_ptr = NULL;
+	errno = 0;
+	long long parsed = strtoll(ptr, &end_ptr, 10);
+	if (errno != 0 || end_ptr == ptr) {
 		return -1;
 	}
-	*out_value = (unsigned long long)input;
+	while (*end_ptr != '\0' && isspace((unsigned char)*end_ptr)) {
+		++end_ptr;
+	}
+	if (*end_ptr != '\0') {
+		return -1; // extra non-whitespace characters -> reject (e.g., fractional part)
+	}
+	if (parsed < 0) {
+		return -1;
+	}
+	*out_value = (unsigned long long)parsed;
 	return 0;
 }
 
