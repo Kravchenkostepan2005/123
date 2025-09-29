@@ -1,0 +1,84 @@
+@startuml
+left to right direction
+skinparam shadowing false
+skinparam actorStyle awesome
+
+title WIS2 — Use Case Diagram (L1)
+
+actor "Guest" as Guest
+actor "User" as User
+actor "Student" as Student
+actor "Lecturer" as Lecturer
+actor "Course Guarantor" as Guarantor
+actor "Administrator" as Admin
+
+rectangle "WIS2" {
+  usecase "Browse courses" as UC_PublicBrowse
+
+  usecase "Edit profile" as UC_EditProfile
+  usecase "Create course" as UC_CreateCourse
+
+  usecase "Manage course" as UC_ManageCourse
+  usecase "Teach (grade)" as UC_Teach
+
+  usecase "Enroll in course" as UC_EnrollCourse
+  usecase "Enroll to event" as UC_EnrollEvent
+  usecase "View my grades" as UC_ViewOwnGrades
+  usecase "View my schedule" as UC_ViewSchedule
+
+  usecase "Manage users" as UC_ManageUsers
+  usecase "Manage rooms" as UC_ManageRooms
+  usecase "Approve courses" as UC_ApproveCourses
+  usecase "Reports" as UC_Reports
+}
+
+Guest -- UC_PublicBrowse
+
+User -- UC_EditProfile
+User -- UC_CreateCourse
+
+Guarantor -- UC_ManageCourse
+Lecturer -- UC_Teach
+
+Student -- UC_EnrollCourse
+Student -- UC_EnrollEvent
+Student -- UC_ViewOwnGrades
+Student -- UC_ViewSchedule
+
+Admin -- UC_ManageUsers
+Admin -- UC_ManageRooms
+Admin -- UC_ApproveCourses
+Admin -- UC_Reports
+@enduml
+
+@startuml
+left to right direction
+skinparam shadowing false
+skinparam actorStyle awesome
+
+title WIS2 — Manage course (L2)
+
+actor "Course Guarantor" as Guarantor
+actor "Student" as Student
+
+rectangle "WIS2 — Course management" {
+  usecase "Manage course" as UC_ManageCourse
+  usecase "Set course parameters\n(type, description, capacity, news)" as UC_SetParams
+  usecase "Manage events\n(create/update/cancel;\ntype, date, room)" as UC_ManageEvents
+  usecase "Add lecturers" as UC_AddLecturers
+  usecase "Approve enrollments" as UC_ApproveEnrollments
+  usecase "View roster and grades" as UC_ViewRoster
+  usecase "Enroll in course" as UC_EnrollCourse
+}
+
+Guarantor -- UC_ManageCourse
+UC_ManageCourse .> UC_SetParams : <<include>>
+UC_ManageCourse .> UC_ManageEvents : <<include>>
+UC_ManageCourse .> UC_AddLecturers : <<include>>
+UC_ManageCourse .> UC_ApproveEnrollments : <<include>>
+UC_ManageCourse .> UC_ViewRoster : <<include>>
+
+Student -- UC_EnrollCourse
+UC_ApproveEnrollments .> UC_EnrollCourse : <<extend>>
+@enduml
+
