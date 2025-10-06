@@ -67,7 +67,7 @@ def my_schedule(current_user: User = Depends(get_current_user), session: Session
     return terms
 
 
-@router.get("/courses/{course_id}/students")
+@router.get("/{course_id}/students")
 def list_course_students(course_id: int, current_user: User = Depends(get_current_user), session: Session = Depends(get_session)):
     # Guarantor or admin only
     course = session.get(Course, course_id)
@@ -99,3 +99,20 @@ def set_term_grade(term_id: int, student_id: int, points: int, current_user: Use
     session.commit()
     session.refresh(tg)
     return tg
+
+
+@router.get("/terms/{term_id}/grades")
+def list_term_grades(term_id: int, current_user: User = Depends(get_current_user), session: Session = Depends(get_session)):
+    term = session.get(CourseTerm, term_id)
+    if not term:
+        raise HTTPException(404, "Term not found")
+    course = session.get(Course, term.course_id)
+    if course.owner_id != current_user.id and not current_user.is_admin:
+        raise HTTPException(403, "Not allowed")
+    grades = session.exec(select(TermGrade).where(TermGrade.term_id == term_id)).all()
+    return grades
+
+
+@router.get("/grades/me")
+def my_grades(current_user: User = Depends(get_current_user), session: Session = Depends(get_session)):
+    return session.exec(select(TermGrade).where(TermGrade.student_id == current_user.id)).all()
