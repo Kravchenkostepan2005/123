@@ -1,0 +1,60 @@
+### Register, login, create course, approve, add term, register, grade
+
+POST http://localhost:8000/auth/register?email=user1@example.com&password=pass123&full_name=User%201
+
+### Login
+# @name login
+POST http://localhost:8000/auth/token
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=&username=user1@example.com&password=pass123&scope=&client_id=&client_secret=
+
+### Set token
+@token = {{login.response.body.$.access_token}}
+
+### Create course (pending)
+POST http://localhost:8000/courses
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "code": "IIS-WIS2",
+  "title": "WIS2",
+  "description": "IS pro výuku",
+  "type": "lecture",
+  "auto_approve_until_limit": true,
+  "capacity_limit": 2
+}
+
+### Admin approve course
+POST http://localhost:8000/admin/courses/1/approve
+Authorization: Bearer {{token}}
+
+### List courses (public)
+GET http://localhost:8000/courses
+
+### Create term (by guarantor)
+POST http://localhost:8000/courses/1/terms
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Přednáška 1",
+  "type": "lecture",
+  "description": "Úvod",
+  "date": "2025-10-06T10:00:00",
+  "requires_registration": true,
+  "capacity_limit": 30
+}
+
+### Register to course
+POST http://localhost:8000/courses/1/register
+Authorization: Bearer {{token}}
+
+### Register to term
+POST http://localhost:8000/courses/terms/1/register
+Authorization: Bearer {{token}}
+
+### Grade user
+POST http://localhost:8000/courses/terms/1/grade/1?points=95
+Authorization: Bearer {{token}}
