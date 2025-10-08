@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1128" height="700" viewBox="0 0 1128 700">
+  <style>.t{font:16px Inter,system-ui,-apple-system,"Segoe UI",Roboto;fill:#111827}.m{fill:#6B7280}</style>
+  <rect width="1128" height="700" fill="#fff"/>
+  <text x="16" y="40" class="t">Form title</text>
+  <rect x="16" y="64" width="540" height="36" rx="8" fill="#fff" stroke="#D1D5DB"/>
+  <text x="24" y="88" class="m">Field A</text>
+  <rect x="572" y="64" width="540" height="36" rx="8" fill="#fff" stroke="#D1D5DB"/>
+  <text x="580" y="88" class="m">Field B</text>
+  <rect x="16" y="120" width="540" height="36" rx="8" fill="#fff" stroke="#D1D5DB"/>
+  <text x="24" y="144" class="m">Field C</text>
+  <rect x="572" y="120" width="540" height="36" rx="8" fill="#fff" stroke="#D1D5DB"/>
+  <text x="580" y="144" class="m">Field D</text>
+  <rect x="16" y="640" width="1096" height="40" fill="#F3F4F6" stroke="#E5E7EB"/>
+  <text x="24" y="666" class="m">Cancel</text>
+  <text x="1060" y="666" class="t" fill="#2563EB">Save</text>
+</svg>
