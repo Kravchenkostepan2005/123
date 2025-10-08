@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="900" viewBox="0 0 1440 900">
+  <style>
+    .t{font:16px Inter,system-ui,-apple-system,"Segoe UI",Roboto;fill:#111827}
+    .m{fill:#6B7280}
+    .btn{rx:8;ry:8}
+  </style>
+  <rect width="1440" height="900" fill="#fff"/>
+  <!-- Top bar -->
+  <rect width="1440" height="56" fill="#111827"/>
+  <text x="24" y="36" class="t" fill="#fff">WIS2</text>
+  <!-- Sidebar -->
+  <rect y="56" width="240" height="844" fill="#F9FAFB"/>
+  <text x="24" y="96" class="t">Dashboard</text>
+  <text x="24" y="128" class="t">Courses</text>
+  <text x="24" y="160" class="t">My Schedule</text>
+  <text x="24" y="192" class="t">Approvals</text>
+  <text x="24" y="224" class="t">Grading</text>
+
+  <!-- Content header -->
+  <text x="280" y="96" class="t">Actions demo</text>
+
+  <!-- Toolbar with +, ✓, × -->
+  <!-- Add (plus) -->
+  <rect x="280" y="112" width="120" height="40" class="btn" fill="#2563EB"/>
+  <line x1="300" y1="132" x2="320" y2="132" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+  <line x1="310" y1="122" x2="310" y2="142" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+  <text x="330" y="138" class="t" fill="#fff">Add</text>
+
+  <!-- Approve (check) -->
+  <rect x="408" y="112" width="140" height="40" class="btn" fill="#16A34A"/>
+  <polyline points="428,134 438,144 452,122" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="460" y="138" class="t" fill="#fff">Approve</text>
+
+  <!-- Cancel/Close (cross) -->
+  <rect x="560" y="112" width="140" height="40" class="btn" fill="#DC2626"/>
+  <line x1="580" y1="122" x2="600" y2="142" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+  <line x1="600" y1="122" x2="580" y2="142" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+  <text x="610" y="138" class="t" fill="#fff">Cancel</text>
+
+  <!-- Table to show context -->
+  <rect x="280" y="176" width="880" height="40" fill="#F3F4F6" stroke="#E5E7EB"/>
+  <text x="300" y="202" class="m">Item</text>
+  <text x="760" y="202" class="m">Status</text>
+  <rect x="280" y="216" width="880" height="48" fill="#fff" stroke="#E5E7EB"/>
+  <rect x="280" y="264" width="880" height="48" fill="#fff" stroke="#E5E7EB"/>
+  <rect x="280" y="312" width="880" height="48" fill="#fff" stroke="#E5E7EB"/>
+</svg>

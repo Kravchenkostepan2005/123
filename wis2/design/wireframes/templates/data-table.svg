@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1128" height="700" viewBox="0 0 1128 700">
+  <style>.t{font:16px Inter,system-ui,-apple-system,"Segoe UI",Roboto;fill:#111827}.m{fill:#6B7280}</style>
+  <rect width="1128" height="700" fill="#fff"/>
+  <text x="16" y="40" class="t">Page title</text>
+  <rect x="16" y="56" width="400" height="36" fill="#fff" stroke="#D1D5DB" rx="8"/>
+  <text x="28" y="80" class="m">Search…</text>
+  <rect x="428" y="56" width="180" height="36" fill="#fff" stroke="#D1D5DB" rx="8"/>
+  <text x="440" y="80" class="m">Filter</text>
+  <rect x="16" y="112" width="1096" height="40" fill="#F3F4F6" stroke="#E5E7EB"/>
+  <text x="32" y="138" class="m">Column A</text>
+  <text x="250" y="138" class="m">Column B</text>
+  <text x="520" y="138" class="m">Column C</text>
+  <text x="740" y="138" class="m">Status</text>
+  <rect x="16" y="152" width="1096" height="48" fill="#fff" stroke="#E5E7EB"/>
+  <rect x="16" y="200" width="1096" height="48" fill="#fff" stroke="#E5E7EB"/>
+  <rect x="16" y="248" width="1096" height="48" fill="#fff" stroke="#E5E7EB"/>
+  <rect x="16" y="624" width="1096" height="40" fill="#F3F4F6" stroke="#E5E7EB"/>
+  <text x="540" y="650" class="m">Pagination</text>
+</svg>

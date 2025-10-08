@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="900" viewBox="0 0 1440 900">
+  <style>
+    .t { font: 14px Inter, system-ui, -apple-system, "Segoe UI", Roboto; fill: #111827 }
+    .muted { fill: #6B7280 }
+    .chip { fill: #E5E7EB; stroke: #9CA3AF }
+    .btn { fill: #2563EB; }
+    .btn-t { font: 14px Inter; fill: #fff }
+    .inp { fill: #fff; stroke: #D1D5DB }
+  </style>
+  <rect x="0" y="0" width="1440" height="900" fill="#ffffff" stroke="#E5E7EB"/>
+  <text x="40" y="40" class="t">Components</text>
+  <!-- Buttons -->
+  <rect x="40" y="70" rx="8" ry="8" width="120" height="40" class="btn"/>
+  <text x="75" y="96" class="btn-t">Primary</text>
+  <rect x="170" y="70" rx="8" ry="8" width="120" height="40" fill="#111827"/>
+  <text x="205" y="96" class="btn-t">Secondary</text>
+  <rect x="300" y="70" rx="8" ry="8" width="120" height="40" fill="#DC2626"/>
+  <text x="338" y="96" class="btn-t">Danger</text>
+  <!-- Inputs -->
+  <rect x="40" y="130" width="300" height="40" rx="8" ry="8" class="inp"/>
+  <text x="50" y="155" class="muted">Text field</text>
+  <rect x="360" y="130" width="200" height="40" rx="8" ry="8" class="inp"/>
+  <text x="370" y="155" class="muted">Select</text>
+  <!-- Chips -->
+  <rect x="40" y="190" width="110" height="28" rx="14" ry="14" class="chip"/>
+  <text x="60" y="208" class="t muted">pending</text>
+  <rect x="160" y="190" width="110" height="28" rx="14" ry="14" class="chip"/>
+  <text x="183" y="208" class="t muted">approved</text>
+  <rect x="280" y="190" width="110" height="28" rx="14" ry="14" class="chip"/>
+  <text x="306" y="208" class="t muted">rejected</text>
+  <!-- Table header -->
+  <rect x="40" y="240" width="880" height="40" fill="#F3F4F6" stroke="#E5E7EB"/>
+  <text x="60" y="265" class="t muted">Kód</text>
+  <text x="180" y="265" class="t muted">Název</text>
+  <text x="400" y="265" class="t muted">Typ</text>
+  <text x="520" y="265" class="t muted">Stav</text>
+  <text x="640" y="265" class="t muted">Kapacita</text>
+  <!-- Table rows -->
+  <rect x="40" y="280" width="880" height="44" fill="#fff" stroke="#E5E7EB"/>
+  <rect x="40" y="324" width="880" height="44" fill="#fff" stroke="#E5E7EB"/>
+</svg>

@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="640" viewBox="0 0 800 640">
+  <style>.t{font:16px Inter,system-ui,-apple-system,"Segoe UI",Roboto;fill:#111827}.m{fill:#6B7280}</style>
+  <rect width="800" height="640" fill="#fff" stroke="#E5E7EB" rx="12"/>
+  <text x="24" y="40" class="t">Nový termín</text>
+  <rect x="24" y="72" width="360" height="36" rx="8" fill="#fff" stroke="#D1D5DB"/>
+  <text x="36" y="96" class="m">Název termínu</text>
+  <rect x="400" y="72" width="180" height="36" rx="8" fill="#fff" stroke="#D1D5DB"/>
+  <text x="412" y="96" class="m">Typ</text>
+  <rect x="24" y="128" width="280" height="36" rx="8" fill="#fff" stroke="#D1D5DB"/>
+  <text x="36" y="152" class="m">Datum a čas</text>
+  <rect x="316" y="128" width="180" height="36" rx="8" fill="#fff" stroke="#D1D5DB"/>
+  <text x="328" y="152" class="m">Místnost</text>
+  <rect x="24" y="184" width="180" height="36" rx="8" fill="#fff" stroke="#D1D5DB"/>
+  <text x="36" y="208" class="m">Max body</text>
+  <rect x="216" y="184" width="200" height="36" rx="8" fill="#fff" stroke="#D1D5DB"/>
+  <text x="228" y="208" class="m">Vyžaduje registraci</text>
+  <rect x="428" y="184" width="180" height="36" rx="8" fill="#fff" stroke="#D1D5DB"/>
+  <text x="440" y="208" class="m">Kapacita</text>
+  <rect x="24" y="240" width="752" height="80" rx="8" fill="#fff" stroke="#D1D5DB"/>
+  <text x="36" y="270" class="m">Popis</text>
+  <rect x="24" y="552" width="752" height="56" fill="#F3F4F6" stroke="#E5E7EB" rx="8"/>
+  <text x="40" y="586" class="m">Zrušit</text>
+  <rect x="680" y="560" width="80" height="40" rx="8" fill="#2563EB"/>
+  <text x="692" y="586" class="t" fill="#fff">Vytvořit</text>
+</svg>

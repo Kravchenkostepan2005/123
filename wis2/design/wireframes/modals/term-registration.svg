@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="520" viewBox="0 0 800 520">
+  <style>.t{font:16px Inter,system-ui,-apple-system,"Segoe UI",Roboto;fill:#111827}.m{fill:#6B7280}</style>
+  <rect width="800" height="520" fill="#fff" stroke="#E5E7EB" rx="12"/>
+  <text x="24" y="40" class="t">Registrovat na termín</text>
+  <rect x="24" y="64" width="360" height="36" rx="8" fill="#fff" stroke="#D1D5DB"/>
+  <text x="36" y="88" class="m">Course</text>
+  <rect x="400" y="64" width="180" height="36" rx="8" fill="#fff" stroke="#D1D5DB"/>
+  <text x="412" y="88" class="m">Term</text>
+  <rect x="24" y="120" width="752" height="80" rx="8" fill="#F9FAFB" stroke="#E5E7EB"/>
+  <text x="36" y="146" class="m">Details: date, type, room, capacity</text>
+  <rect x="24" y="440" width="752" height="56" fill="#F3F4F6" stroke="#E5E7EB" rx="8"/>
+  <text x="40" y="474" class="m">Cancel</text>
+  <rect x="680" y="448" width="80" height="40" rx="8" fill="#2563EB"/>
+  <text x="696" y="474" class="t" fill="#fff">Register</text>
+</svg>
