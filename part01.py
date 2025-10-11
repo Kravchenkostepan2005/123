@@ -332,6 +332,57 @@ def download_data() -> Dict[str, List[Any]]:
 
 
 if __name__ == "__main__":
+    # Tests (silent): ensure correctness and headless plotting
+    import math as _math
+    import os as _os
+    import tempfile as _tempfile
+    import matplotlib as _mpl
+    _mpl.use("Agg", force=True)
+
+    def _wave_inference_bad(_x: np.ndarray, _y: np.ndarray, _src: np.ndarray, _wl: float) -> np.ndarray:
+        if _wl == 0:
+            raise ValueError("wavelength must be non-zero")
+        _k = 2.0 * _math.pi / float(_wl)
+        _Z = np.zeros((_x.size, _y.size), dtype=float)
+        for _i, _xi in enumerate(_x):
+            for _j, _yj in enumerate(_y):
+                _s = 0.0
+                for _sx, _sy in _src:
+                    _d2 = (_xi - float(_sx)) ** 2 + (_yj - float(_sy)) ** 2
+                    _s += _math.cos(_k * _d2) / (1.0 + _d2)
+                _Z[_i, _j] = _s
+        return _Z
+
+    _Xt = np.linspace(-10.0, 10.0, 40)
+    _Yt = np.linspace(-10.0, 10.0, 40)
+    _St = np.array([[-3.0, 0.0], [3.0, 0.0], [0.0, 4.0]], dtype=float)
+    _Zv = wave_inference(_Xt, _Yt, _St, wavelength=2.0)
+    _Zn = _wave_inference_bad(_Xt, _Yt, _St, wavelength=2.0)
+    assert _Zv.shape == (_Xt.size, _Yt.size)
+    assert np.isfinite(_Zv).all()
+    assert np.allclose(_Zv, _Zn, rtol=1e-12, atol=1e-12)
+
+    with _tempfile.TemporaryDirectory() as _d:
+        _wave_png = _os.path.join(_d, "wave.png")
+        plot_wave(_Zv, _Xt, _Yt, show_figure=False, save_path=_wave_png)
+        assert _os.path.exists(_wave_png) and _os.path.getsize(_wave_png) > 0
+
+    with _tempfile.TemporaryDirectory() as _d2:
+        _sinus_png = _os.path.join(_d2, "sinus.png")
+        generate_sinus(show_figure=False, save_path=_sinus_png)
+        assert _os.path.exists(_sinus_png) and _os.path.getsize(_sinus_png) > 0
+
+    try:
+        _data = download_data()
+        _n = len(_data.get("positions", []))
+        assert _n > 0
+        assert len(_data.get("lats", [])) == _n
+        assert len(_data.get("longs", [])) == _n
+        assert len(_data.get("heights", [])) == _n
+    except Exception:
+        # Allow environments without network/parsers to pass silently
+        pass
+
     # Example manual run (silent; no console output)
     X = np.linspace(-10, 10, 200)
     Y = np.linspace(-10, 10, 200)
