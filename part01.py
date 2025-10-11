@@ -152,12 +152,21 @@ def plot_wave(
         cbar = fig.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
     cbar.set_label("Amplitude")
 
-    # Axes formatting: exact data limits and clean ticks
+    # Axes formatting: exact data limits and ticks every 2.5 on both axes
     ax.set_xlim(x_min, x_max)
     ax.set_ylim(y_min, y_max)
     try:
-        ax.set_xticks(np.linspace(x_min, x_max, 5))
-        ax.set_yticks(np.linspace(y_min, y_max, 5))
+        step = 2.5
+        def _ticks(vmin: float, vmax: float, s: float) -> np.ndarray:
+            start = np.ceil(vmin / s) * s
+            end = np.floor(vmax / s) * s
+            if end < start:
+                # fallback to simple endpoints if range is smaller than step
+                return np.array([vmin, vmax], dtype=float)
+            # add a small epsilon to include end due to fp rounding
+            return np.arange(start, end + 1e-9, s)
+        ax.set_xticks(_ticks(x_min, x_max, step))
+        ax.set_yticks(_ticks(y_min, y_max, step))
     except Exception:
         pass
 
