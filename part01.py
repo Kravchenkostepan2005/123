@@ -77,8 +77,9 @@ def wave_inference(
     sy = source[:, 1][:, None, None]
 
     # Squared distance for each source to every grid point
+    # Per assignment: d^2 = (x - Sx)^2 + (y + Sy)^2
     dx = X[None, :, :] - sx
-    dy = Y[None, :, :] - sy
+    dy = Y[None, :, :] + sy
     d2 = dx * dx + dy * dy  # shape: (ns, nx, ny)
 
     k = 2.0 * np.pi / float(wavelength)
@@ -389,7 +390,7 @@ if __name__ == "__main__":
             for _j, _yj in enumerate(_y):
                 _s = 0.0
                 for _sx, _sy in _src:
-                    _d2 = (_xi - float(_sx)) ** 2 + (_yj - float(_sy)) ** 2
+                    _d2 = (_xi - float(_sx)) ** 2 + (_yj + float(_sy)) ** 2
                     _s += _math.cos(_k * _d2) / (1.0 + _d2)
                 _Z[_i, _j] = _s
         return _Z
