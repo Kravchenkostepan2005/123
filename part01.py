@@ -340,6 +340,7 @@ if __name__ == "__main__":
     parser.add_argument("--show", action="store_true", help="Show figure windows (if GUI available)")
     parser.add_argument("--wave-save", type=str, default=None, help="Path to save the wave plot image")
     parser.add_argument("--sinus-save", type=str, default=None, help="Path to save the sinus plot image")
+    parser.add_argument("--verbose", action="store_true", help="Print info messages (paths, summaries)")
     args = parser.parse_args()
 
     # Default behavior: if no flags, save both plots to PNG (robust for non-GUI envs)
@@ -353,19 +354,21 @@ if __name__ == "__main__":
         wave_out = args.wave_save or ("wave.png" if (run_default or not args.show) else None)
         try:
             plot_wave(Z, X, Y, show_figure=args.show, save_path=wave_out)
-            if wave_out:
+            if wave_out and args.verbose:
                 print(f"Saved wave plot to {Path(wave_out).resolve()}")
         except Exception as e:
-            print("Wave plot generation failed:", e)
+            if args.verbose:
+                print("Wave plot generation failed:", e)
 
     if args.sinus or run_default:
         sinus_out = args.sinus_save or ("sinus.png" if (run_default or not args.show) else None)
         try:
             generate_sinus(show_figure=args.show, save_path=sinus_out)
-            if sinus_out:
+            if sinus_out and args.verbose:
                 print(f"Saved sinus plot to {Path(sinus_out).resolve()}")
         except Exception as e:
-            print("Sinus plot generation failed:", e)
+            if args.verbose:
+                print("Sinus plot generation failed:", e)
 
     if args.download:
         try:
