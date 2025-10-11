@@ -177,8 +177,8 @@ def plot_wave(
     except Exception:
         pass
 
-    ax.set_xlabel("x")
-    ax.set_ylabel("y")
+    ax.set_xlabel("X pozice")
+    ax.set_ylabel("Y pozice")
     ax.set_title("Vlnové pole")
 
     fig.tight_layout()
