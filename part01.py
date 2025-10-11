@@ -242,13 +242,13 @@ def generate_sinus(
     try:
         ax2.set_xticklabels([
             "0",
-            r"$\\tfrac{\\pi}{2}$",
+            r"$\\frac{\\pi}{2}$",
             r"$\\pi$",
-            r"$\\tfrac{3\\pi}{2}$",
+            r"$\\frac{3\\pi}{2}$",
             r"$2\\pi$",
-            r"$\\tfrac{5\\pi}{2}$",
+            r"$\\frac{5\\pi}{2}$",
             r"$3\\pi$",
-            r"$\\tfrac{7\\pi}{2}$",
+            r"$\\frac{7\\pi}{2}$",
             r"$4\\pi$",
         ])
     except Exception:
