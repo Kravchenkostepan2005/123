@@ -226,13 +226,33 @@ def generate_sinus(
     ax2.plot(x, max_cos, color="#ff7f0e", linewidth=2.2)
     ax2.plot(x, max_sin, color="#1f77b4", linewidth=2.2)
 
-    # Ticks: 0, π, 2π, 3π, 4π — prefer LaTeX labels per assignment; fallback to Unicode
-    xticks = [0.0, np.pi, 2.0 * np.pi, 3.0 * np.pi, 4.0 * np.pi]
+    # Ticks every π/2 from 0 to 4π — matches reference
+    xticks = [
+        0.0,
+        0.5 * np.pi,
+        1.0 * np.pi,
+        1.5 * np.pi,
+        2.0 * np.pi,
+        2.5 * np.pi,
+        3.0 * np.pi,
+        3.5 * np.pi,
+        4.0 * np.pi,
+    ]
     ax2.set_xticks(xticks)
     try:
-        ax2.set_xticklabels(["0", r"$\\pi$", r"$2\\pi$", r"$3\\pi$", r"$4\\pi$"])
+        ax2.set_xticklabels([
+            "0",
+            r"$\\tfrac{\\pi}{2}$",
+            r"$\\pi$",
+            r"$\\tfrac{3\\pi}{2}$",
+            r"$2\\pi$",
+            r"$\\tfrac{5\\pi}{2}$",
+            r"$3\\pi$",
+            r"$\\tfrac{7\\pi}{2}$",
+            r"$4\\pi$",
+        ])
     except Exception:
-        ax2.set_xticklabels(["0", "π", "2π", "3π", "4π"])  # robust fallback
+        ax2.set_xticklabels(["0", "π/2", "π", "3π/2", "2π", "5π/2", "3π", "7π/2", "4π"])  # robust fallback
 
     ax2.set_xlim(0.0, 4.0 * np.pi)
     ax2.set_ylim(-1.1, 1.1)
