@@ -208,7 +208,8 @@ def generate_sinus(
     ax1.plot(x, c, color="#ff7f0e", linewidth=2.0)
     ax1.fill_between(x, s, c, color="#2ca02c", alpha=0.35)
     ax1.set_xlim(0.0, 4.0 * np.pi)
-    ax1.set_ylim(-1.1, 1.1)
+    ax1.set_ylim(-1.5, 1.5)
+    ax1.set_yticks(np.arange(-1.5, 1.51, 0.5))
     ax1.set_ylabel("value")
     ax1.grid(True, alpha=0.25)
 
@@ -255,7 +256,7 @@ def generate_sinus(
         ax2.set_xticklabels(["0", "π/2", "π", "3π/2", "2π", "5π/2", "3π", "7π/2", "4π"])  # robust fallback
 
     ax2.set_xlim(0.0, 4.0 * np.pi)
-    ax2.set_ylim(-1.1, 1.1)
+    ax2.set_ylim(-1.5, 1.5)
     ax2.set_xlabel(r"$x$")
     ax2.set_ylabel("value")
     ax2.grid(True, alpha=0.25)
