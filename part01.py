@@ -207,10 +207,13 @@ def generate_sinus(
     ax2.plot(x, max_cos, color="#ff7f0e", linewidth=2.0, label="max (cos)")
     ax2.plot(x, max_sin, color="#1f77b4", linewidth=2.0, label="max (sin)")
 
-    # Ticks: 0, π, 2π, 3π, 4π (use Unicode labels for robustness)
+    # Ticks: 0, π, 2π, 3π, 4π — prefer LaTeX labels per assignment; fallback to Unicode
     xticks = [0.0, np.pi, 2.0 * np.pi, 3.0 * np.pi, 4.0 * np.pi]
     ax2.set_xticks(xticks)
-    ax2.set_xticklabels(["0", "π", "2π", "3π", "4π"])  # avoid mathtext dependency
+    try:
+        ax2.set_xticklabels(["0", r"$\\pi$", r"$2\\pi$", r"$3\\pi$", r"$4\\pi$"])
+    except Exception:
+        ax2.set_xticklabels(["0", "π", "2π", "3π", "4π"])  # robust fallback
 
     ax2.set_xlabel("x")
     ax2.set_ylabel("value")
@@ -329,58 +332,6 @@ def download_data() -> Dict[str, List[Any]]:
 
 
 if __name__ == "__main__":
-    # Simple CLI so the script is useful when executed directly.
-    import argparse
-    from pathlib import Path
-
-    parser = argparse.ArgumentParser(description="Part01 utilities: plotting and data download")
-    parser.add_argument("--wave", action="store_true", help="Generate wave interference plot")
-    parser.add_argument("--sinus", action="store_true", help="Generate sinus/cos figure")
-    parser.add_argument("--download", action="store_true", help="Download station data and print a summary")
-    parser.add_argument("--show", action="store_true", help="Show figure windows (if GUI available)")
-    parser.add_argument("--wave-save", type=str, default=None, help="Path to save the wave plot image")
-    parser.add_argument("--sinus-save", type=str, default=None, help="Path to save the sinus plot image")
-    parser.add_argument("--verbose", action="store_true", help="Print info messages (paths, summaries)")
-    args = parser.parse_args()
-
-    # Default behavior: if no flags, save both plots to PNG (robust for non-GUI envs)
-    run_default = not (args.wave or args.sinus or args.download)
-
-    if args.wave or run_default:
-        X = np.linspace(-10, 10, 200)
-        Y = np.linspace(-10, 10, 200)
-        S = np.array([[-3.0, 0.0], [3.0, 0.0], [0.0, 4.0]], dtype=float)
-        Z = wave_inference(X, Y, S, wavelength=2.0)
-        wave_out = args.wave_save or ("wave.png" if (run_default or not args.show) else None)
-        try:
-            plot_wave(Z, X, Y, show_figure=args.show, save_path=wave_out)
-            if wave_out and args.verbose:
-                print(f"Saved wave plot to {Path(wave_out).resolve()}")
-        except Exception as e:
-            if args.verbose:
-                print("Wave plot generation failed:", e)
-
-    if args.sinus or run_default:
-        sinus_out = args.sinus_save or ("sinus.png" if (run_default or not args.show) else None)
-        try:
-            generate_sinus(show_figure=args.show, save_path=sinus_out)
-            if sinus_out and args.verbose:
-                print(f"Saved sinus plot to {Path(sinus_out).resolve()}")
-        except Exception as e:
-            if args.verbose:
-                print("Sinus plot generation failed:", e)
-
-    if args.download:
-        try:
-            data = download_data()
-            print(f"Parsed stations: {len(data['positions'])}")
-            if data["positions"]:
-                print(
-                    "First:",
-                    data["positions"][0],
-                    data["lats"][0],
-                    data["longs"][0],
-                    data["heights"][0],
-                )
-        except Exception as e:
-            print("download_data() failed:", e)
+    # Intentionally do nothing when executed directly to match assignment:
+    # the module should only provide functions and perform no I/O by default.
+    pass
