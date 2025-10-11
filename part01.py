@@ -397,7 +397,7 @@ if __name__ == "__main__":
     _Yt = np.linspace(-10.0, 10.0, 40)
     _St = np.array([[-3.0, 0.0], [3.0, 0.0], [0.0, 4.0]], dtype=float)
     _Zv = wave_inference(_Xt, _Yt, _St, wavelength=2.0)
-    _Zn = _wave_inference_bad(_Xt, _Yt, _St, wavelength=2.0)
+    _Zn = _wave_inference_bad(_Xt, _Yt, _St, 2.0)
     assert _Zv.shape == (_Xt.size, _Yt.size)
     assert np.isfinite(_Zv).all()
     assert np.allclose(_Zv, _Zn, rtol=1e-12, atol=1e-12)
