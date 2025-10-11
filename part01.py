@@ -162,7 +162,6 @@ def plot_wave(
 
     ax.set_xlabel("x")
     ax.set_ylabel("y")
-    ax.set_title("Wave interference amplitude")
 
     fig.tight_layout()
 
@@ -205,12 +204,13 @@ def generate_sinus(
     )
 
     # Subplot 1: both curves with fill-between
-    ax1.plot(x, s, label="sin(x)", color="#1f77b4", linewidth=1.8)
-    ax1.plot(x, c, label="cos(x)", color="#ff7f0e", linewidth=1.8)
-    ax1.fill_between(x, s, c, color="#cccccc", alpha=0.5)
+    ax1.plot(x, s, color="#1f77b4", linewidth=2.0)
+    ax1.plot(x, c, color="#ff7f0e", linewidth=2.0)
+    ax1.fill_between(x, s, c, color="#bbbbbb", alpha=0.35)
+    ax1.set_xlim(0.0, 4.0 * np.pi)
+    ax1.set_ylim(-1.1, 1.1)
     ax1.set_ylabel("value")
-    ax1.legend(loc="upper right")
-    ax1.grid(True, alpha=0.2)
+    ax1.grid(True, alpha=0.25)
 
     # Subplot 2: min (dashed) and max colored by source function
     m = np.minimum(s, c)
@@ -218,13 +218,13 @@ def generate_sinus(
     is_cos_max = c >= s
 
     # Plot min as dashed gray
-    ax2.plot(x, m, linestyle="--", color="#666666", linewidth=1.6, label="min(sin, cos)")
+    ax2.plot(x, m, linestyle="--", color="#000000", linewidth=1.6)
 
     # Plot max with color indicating which function dominates
     max_cos = np.where(is_cos_max, M, np.nan)
     max_sin = np.where(~is_cos_max, M, np.nan)
-    ax2.plot(x, max_cos, color="#ff7f0e", linewidth=2.0, label="max (cos)")
-    ax2.plot(x, max_sin, color="#1f77b4", linewidth=2.0, label="max (sin)")
+    ax2.plot(x, max_cos, color="#ff7f0e", linewidth=2.2)
+    ax2.plot(x, max_sin, color="#1f77b4", linewidth=2.2)
 
     # Ticks: 0, π, 2π, 3π, 4π — prefer LaTeX labels per assignment; fallback to Unicode
     xticks = [0.0, np.pi, 2.0 * np.pi, 3.0 * np.pi, 4.0 * np.pi]
@@ -234,13 +234,14 @@ def generate_sinus(
     except Exception:
         ax2.set_xticklabels(["0", "π", "2π", "3π", "4π"])  # robust fallback
 
-    ax2.set_xlabel("x")
+    ax2.set_xlim(0.0, 4.0 * np.pi)
+    ax2.set_ylim(-1.1, 1.1)
+    ax2.set_xlabel(r"$x$")
     ax2.set_ylabel("value")
-    ax2.grid(True, alpha=0.2)
+    ax2.grid(True, alpha=0.25)
 
     # Overall adjustments
-    fig.suptitle("Sinusoidal functions: sin(x) and cos(x)")
-    fig.tight_layout(rect=[0, 0, 1, 0.97])
+    fig.tight_layout()
 
     if save_path:
         fig.savefig(save_path, dpi=150)
