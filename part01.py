@@ -206,7 +206,7 @@ def generate_sinus(
     # Subplot 1: both curves with fill-between
     ax1.plot(x, s, color="#1f77b4", linewidth=2.0)
     ax1.plot(x, c, color="#ff7f0e", linewidth=2.0)
-    ax1.fill_between(x, s, c, color="#bbbbbb", alpha=0.35)
+    ax1.fill_between(x, s, c, color="#2ca02c", alpha=0.35)
     ax1.set_xlim(0.0, 4.0 * np.pi)
     ax1.set_ylim(-1.1, 1.1)
     ax1.set_ylabel("value")
