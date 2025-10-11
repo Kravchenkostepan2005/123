@@ -257,8 +257,8 @@ def generate_sinus(
 
     ax2.set_xlim(0.0, 4.0 * np.pi)
     ax2.set_ylim(-1.5, 1.5)
-    ax2.set_xlabel(r"$x$")
-    ax2.set_ylabel("value")
+    # No x-axis label per specification; keep y-axis labeled as f(x)
+    ax2.set_ylabel("f(x)")
     ax2.grid(True, alpha=0.25)
 
     # Overall adjustments
