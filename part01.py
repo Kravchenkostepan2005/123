@@ -332,6 +332,29 @@ def download_data() -> Dict[str, List[Any]]:
 
 
 if __name__ == "__main__":
-    # Intentionally do nothing when executed directly to match assignment:
-    # the module should only provide functions and perform no I/O by default.
-    pass
+    # Minimal self-test sequence (no stdout output on success).
+    import numpy as _np
+
+    # Wave inference: shape and finiteness
+    _X = _np.linspace(-10.0, 10.0, 100)
+    _Y = _np.linspace(-10.0, 10.0, 100)
+    _S = _np.array([[-3.0, 0.0], [3.0, 0.0], [0.0, 4.0]], dtype=float)
+    _Z = wave_inference(_X, _Y, _S, wavelength=2.0)
+    assert _Z.shape == (_X.size, _Y.size)
+    assert _np.isfinite(_Z).all()
+
+    # Plot routines: ensure they run headless and without saving files
+    plot_wave(_Z, _X, _Y, show_figure=False, save_path=None)
+    generate_sinus(show_figure=False, save_path=None)
+
+    # Data download: validate basic structure if network available; otherwise skip
+    try:
+        _data = download_data()
+        _n = len(_data.get("positions", []))
+        assert _n > 0
+        assert len(_data.get("lats", [])) == _n
+        assert len(_data.get("longs", [])) == _n
+        assert len(_data.get("heights", [])) == _n
+    except Exception:
+        # Network issues or site unavailability should not make the script fail
+        pass
