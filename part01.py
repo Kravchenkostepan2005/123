@@ -134,15 +134,10 @@ def plot_wave(
     y_min, y_max = float(y.min()), float(y.max())
     extent = [x_min, x_max, y_min, y_max]
     norm = TwoSlopeNorm(vmin=-1.0, vcenter=0.0, vmax=1.0)
-    im = ax.imshow(
-        Z.T,
-        extent=extent,
-        origin="lower",
-        aspect="equal",
-        cmap="seismic",
-        norm=norm,
-        interpolation="bilinear",
-    )
+    # Use filled contours to match reference look
+    levels = np.linspace(-1.0, 1.0, 17)
+    xv, yv = np.meshgrid(x, y, indexing="xy")
+    cs = ax.contourf(xv, yv, Z.T, levels=levels, cmap="seismic", norm=norm, extend="both")
 
     # Colorbar aligned to the axis height
     try:
@@ -150,9 +145,9 @@ def plot_wave(
 
         divider = make_axes_locatable(ax)
         cax = divider.append_axes("right", size="5%", pad=0.1)
-        cbar = fig.colorbar(im, cax=cax)
+        cbar = fig.colorbar(cs, cax=cax)
     except Exception:
-        cbar = fig.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
+        cbar = fig.colorbar(cs, ax=ax, fraction=0.046, pad=0.04)
     cbar.set_label("Aplituda vlny")
     try:
         import numpy as _np_cbar
