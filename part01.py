@@ -204,8 +204,8 @@ def generate_sinus(
     )
 
     # Subplot 1: both curves with fill-between
-    ax1.plot(x, s, color="#1f77b4", linewidth=2.0)
-    ax1.plot(x, c, color="#ff7f0e", linewidth=2.0)
+    ax1.plot(x, s, color="#7f7f7f", linewidth=2.0)
+    ax1.plot(x, c, color="#7f7f7f", linewidth=2.0)
     ax1.fill_between(x, s, c, color="#2ca02c", alpha=0.35)
     ax1.set_xlim(0.0, 4.0 * np.pi)
     ax1.set_ylim(-1.5, 1.5)
@@ -219,7 +219,7 @@ def generate_sinus(
     is_cos_max = c >= s
 
     # Plot min as dashed gray
-    ax2.plot(x, m, linestyle="--", color="#000000", linewidth=1.6)
+    ax2.plot(x, m, linestyle="--", color="#7f7f7f", linewidth=1.6)
 
     # Plot max with color indicating which function dominates
     max_cos = np.where(is_cos_max, M, np.nan)
