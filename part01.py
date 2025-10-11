@@ -139,6 +139,8 @@ def plot_wave(
         aspect="equal",
         cmap="viridis",
         interpolation="nearest",
+        vmin=-1.0,
+        vmax=1.0,
     )
 
     # Colorbar aligned to the axis height
@@ -150,7 +152,12 @@ def plot_wave(
         cbar = fig.colorbar(im, cax=cax)
     except Exception:
         cbar = fig.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
-    cbar.set_label("Amplitude")
+    cbar.set_label("Aplituda vlny")
+    try:
+        import numpy as _np_cbar
+        cbar.set_ticks(_np_cbar.arange(-1.0, 1.0 + 1e-9, 0.25))
+    except Exception:
+        pass
 
     # Axes formatting: exact data limits and ticks every 2.5 on both axes
     ax.set_xlim(x_min, x_max)
