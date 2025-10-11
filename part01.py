@@ -116,6 +116,7 @@ def plot_wave(
         If provided, saves the figure to this path via ``plt.savefig()``.
     """
     import matplotlib.pyplot as plt  # local import per assignment constraints
+    from matplotlib.colors import TwoSlopeNorm
 
     x = np.asarray(x)
     y = np.asarray(y)
@@ -132,15 +133,15 @@ def plot_wave(
     x_min, x_max = float(x.min()), float(x.max())
     y_min, y_max = float(y.min()), float(y.max())
     extent = [x_min, x_max, y_min, y_max]
+    norm = TwoSlopeNorm(vmin=-1.0, vcenter=0.0, vmax=1.0)
     im = ax.imshow(
         Z.T,
         extent=extent,
         origin="lower",
         aspect="equal",
-        cmap="viridis",
-        interpolation="nearest",
-        vmin=-1.0,
-        vmax=1.0,
+        cmap="seismic",
+        norm=norm,
+        interpolation="bilinear",
     )
 
     # Colorbar aligned to the axis height
