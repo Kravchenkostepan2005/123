@@ -179,6 +179,7 @@ def plot_wave(
 
     ax.set_xlabel("x")
     ax.set_ylabel("y")
+    ax.set_title("Vlnové pole")
 
     fig.tight_layout()
 
