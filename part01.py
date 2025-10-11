@@ -329,25 +329,55 @@ def download_data() -> Dict[str, List[Any]]:
 
 
 if __name__ == "__main__":
-    # Example manual run (kept minimal and optional).
-    X = np.linspace(-10, 10, 200)
-    Y = np.linspace(-10, 10, 200)
-    S = np.array([[-3.0, 0.0], [3.0, 0.0], [0.0, 4.0]], dtype=float)
-    Z = wave_inference(X, Y, S, wavelength=2.0)
+    # Simple CLI so the script is useful when executed directly.
+    import argparse
+    from pathlib import Path
 
-    # Save figures (not shown by default)
-    try:
-        plot_wave(Z, X, Y, show_figure=False, save_path="wave.png")
-        generate_sinus(show_figure=False, save_path="sinus.png")
-    except Exception:
-        # Plotting may fail in some headless environments without a backend
-        pass
+    parser = argparse.ArgumentParser(description="Part01 utilities: plotting and data download")
+    parser.add_argument("--wave", action="store_true", help="Generate wave interference plot")
+    parser.add_argument("--sinus", action="store_true", help="Generate sinus/cos figure")
+    parser.add_argument("--download", action="store_true", help="Download station data and print a summary")
+    parser.add_argument("--show", action="store_true", help="Show figure windows (if GUI available)")
+    parser.add_argument("--wave-save", type=str, default=None, help="Path to save the wave plot image")
+    parser.add_argument("--sinus-save", type=str, default=None, help="Path to save the sinus plot image")
+    args = parser.parse_args()
 
-    # Fetch and summarize station data
-    try:
-        data = download_data()
-        print(f"Parsed stations: {len(data['positions'])}")
-        if data["positions"]:
-            print("First:", data["positions"][0], data["lats"][0], data["longs"][0], data["heights"][0])
-    except Exception as e:
-        print("download_data() failed:", e)
+    # Default behavior: if no flags, save both plots to PNG (robust for non-GUI envs)
+    run_default = not (args.wave or args.sinus or args.download)
+
+    if args.wave or run_default:
+        X = np.linspace(-10, 10, 200)
+        Y = np.linspace(-10, 10, 200)
+        S = np.array([[-3.0, 0.0], [3.0, 0.0], [0.0, 4.0]], dtype=float)
+        Z = wave_inference(X, Y, S, wavelength=2.0)
+        wave_out = args.wave_save or ("wave.png" if (run_default or not args.show) else None)
+        try:
+            plot_wave(Z, X, Y, show_figure=args.show, save_path=wave_out)
+            if wave_out:
+                print(f"Saved wave plot to {Path(wave_out).resolve()}")
+        except Exception as e:
+            print("Wave plot generation failed:", e)
+
+    if args.sinus or run_default:
+        sinus_out = args.sinus_save or ("sinus.png" if (run_default or not args.show) else None)
+        try:
+            generate_sinus(show_figure=args.show, save_path=sinus_out)
+            if sinus_out:
+                print(f"Saved sinus plot to {Path(sinus_out).resolve()}")
+        except Exception as e:
+            print("Sinus plot generation failed:", e)
+
+    if args.download:
+        try:
+            data = download_data()
+            print(f"Parsed stations: {len(data['positions'])}")
+            if data["positions"]:
+                print(
+                    "First:",
+                    data["positions"][0],
+                    data["lats"][0],
+                    data["longs"][0],
+                    data["heights"][0],
+                )
+        except Exception as e:
+            print("download_data() failed:", e)
