@@ -279,7 +279,11 @@ def download_data() -> Dict[str, List[Any]]:
     resp.raise_for_status()
     html = resp.text
 
-    soup = BeautifulSoup(html, "lxml")
+    # Use lxml if available; otherwise fall back to the built-in html.parser
+    try:
+        soup = BeautifulSoup(html, "lxml")
+    except Exception:
+        soup = BeautifulSoup(html, "html.parser")
 
     positions: List[str] = []
     lats: List[float] = []
