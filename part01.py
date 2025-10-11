@@ -128,7 +128,9 @@ def plot_wave(
     fig, ax = plt.subplots(figsize=(7.5, 6))
 
     # imshow expects matrix indexing (rows as Y), so transpose Z for consistent axes
-    extent = [float(x.min()), float(x.max()), float(y.min()), float(y.max())]
+    x_min, x_max = float(x.min()), float(x.max())
+    y_min, y_max = float(y.min()), float(y.max())
+    extent = [x_min, x_max, y_min, y_max]
     im = ax.imshow(
         Z.T,
         extent=extent,
@@ -138,8 +140,25 @@ def plot_wave(
         interpolation="nearest",
     )
 
-    cbar = fig.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
+    # Colorbar aligned to the axis height
+    try:
+        from mpl_toolkits.axes_grid1 import make_axes_locatable
+
+        divider = make_axes_locatable(ax)
+        cax = divider.append_axes("right", size="5%", pad=0.1)
+        cbar = fig.colorbar(im, cax=cax)
+    except Exception:
+        cbar = fig.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
     cbar.set_label("Amplitude")
+
+    # Axes formatting: exact data limits and clean ticks
+    ax.set_xlim(x_min, x_max)
+    ax.set_ylim(y_min, y_max)
+    try:
+        ax.set_xticks(np.linspace(x_min, x_max, 5))
+        ax.set_yticks(np.linspace(y_min, y_max, 5))
+    except Exception:
+        pass
 
     ax.set_xlabel("x")
     ax.set_ylabel("y")
