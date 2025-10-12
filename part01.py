@@ -116,7 +116,7 @@ def plot_wave(
         If provided, saves the figure to this path via ``plt.savefig()``.
     """
     import matplotlib.pyplot as plt  # local import per assignment constraints
-    from matplotlib.colors import TwoSlopeNorm
+    from matplotlib.colors import Normalize
 
     x = np.asarray(x)
     y = np.asarray(y)
@@ -133,11 +133,11 @@ def plot_wave(
     x_min, x_max = float(x.min()), float(x.max())
     y_min, y_max = float(y.min()), float(y.max())
     extent = [x_min, x_max, y_min, y_max]
-    norm = TwoSlopeNorm(vmin=-1.0, vcenter=0.0, vmax=1.0)
-    # Use filled contours to match reference look
-    levels = np.linspace(-1.0, 1.0, 17)
+    norm = Normalize(vmin=-1.0, vmax=1.0)
+    # Use filled contours with yellow-green palette
+    levels = np.linspace(-1.0, 1.0, 21)
     xv, yv = np.meshgrid(x, y, indexing="xy")
-    cs = ax.contourf(xv, yv, Z.T, levels=levels, cmap="seismic", norm=norm, extend="both")
+    cs = ax.contourf(xv, yv, Z.T, levels=levels, cmap="YlGn", norm=norm, extend="both")
 
     # Colorbar aligned to the axis height
     try:
