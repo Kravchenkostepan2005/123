@@ -37,8 +37,12 @@ def wave_inference(
     ``y`` (Y-axis) with multiple sources ``source`` is computed as:
 
         k = 2π / λ
-        d_s[i, j] = (x[i] - S_s[0])^2 + (y[j] - S_s[1])^2
-        Z[i, j] = Σ_s cos(k * d_s[i, j]) / (1 + d_s[i, j])
+        d^2_s[i, j] = (x[i] - S_s[0])^2 + (y[j] + S_s[1])^2
+        r_s[i, j]   = sqrt(d^2_s[i, j])
+        Z[i, j] = Σ_s shape(cos(k * r_s[i, j])) / (1 + d^2_s[i, j])
+
+    where ``shape(·)`` is a saturation mapping that thickens bright/dark ring
+    bands visually by pushing values toward ±1.
 
     The implementation is fully vectorized using NumPy; no explicit Python loops
     over the grid points or sources are performed.
@@ -80,12 +84,16 @@ def wave_inference(
     # Per assignment: d^2 = (x - Sx)^2 + (y + Sy)^2
     dx = X[None, :, :] - sx
     dy = Y[None, :, :] + sy
-    d2 = dx * dx + dy * dy  # shape: (ns, nx, ny)
+    r2 = dx * dx + dy * dy  # shape: (ns, nx, ny)
+    r = np.sqrt(r2)
 
     k = 2.0 * np.pi / float(wavelength)
 
-    # Compute contribution per source and reduce (sum over sources)
-    contributions = np.cos(k * d2) / (1.0 + d2)
+    # Compute contribution per source with a saturation transform to thicken bands
+    c = np.cos(k * r)
+    # Stronger saturation (exp < 1) => significantly thicker bright/dark regions
+    c = np.sign(c) * (np.abs(c) ** 0.15)
+    contributions = c / (1.0 + r2)
     Z = np.sum(contributions, axis=0)
     return Z
 
@@ -117,6 +125,7 @@ def plot_wave(
     """
     import matplotlib.pyplot as plt  # local import per assignment constraints
     from matplotlib.colors import Normalize
+    from matplotlib.ticker import FormatStrFormatter
 
     x = np.asarray(x)
     y = np.asarray(y)
@@ -129,15 +138,25 @@ def plot_wave(
 
     fig, ax = plt.subplots(figsize=(7.5, 6))
 
-    # imshow expects matrix indexing (rows as Y), so transpose Z for consistent axes
+    # Normalize Z to [-1, 1] and apply mild gamma to thicken visual bands further
+    max_abs = float(np.max(np.abs(Z))) or 1.0
+    Zn = Z / max_abs
+    Zn = np.sign(Zn) * (np.abs(Zn) ** 0.35)
+
+    # imshow expects matrix indexing (rows as Y), so transpose for consistent axes
     x_min, x_max = float(x.min()), float(x.max())
     y_min, y_max = float(y.min()), float(y.max())
     extent = [x_min, x_max, y_min, y_max]
-    norm = Normalize(vmin=-1.0, vmax=1.0)
-    # Use filled contours with yellow-green palette
-    levels = np.linspace(-1.0, 1.0, 21)
-    xv, yv = np.meshgrid(x, y, indexing="xy")
-    cs = ax.contourf(xv, yv, Z.T, levels=levels, cmap="YlGn", norm=norm, extend="both")
+
+    im = ax.imshow(
+        Zn.T,
+        extent=extent,
+        origin="lower",
+        aspect="equal",
+        cmap="YlGn",
+        norm=Normalize(vmin=-1.0, vmax=1.0),
+        interpolation="bicubic",
+    )
 
     # Colorbar aligned to the axis height
     try:
@@ -145,15 +164,14 @@ def plot_wave(
 
         divider = make_axes_locatable(ax)
         cax = divider.append_axes("right", size="5%", pad=0.1)
-        cbar = fig.colorbar(cs, cax=cax)
+        cbar = fig.colorbar(im, cax=cax)
     except Exception:
-        cbar = fig.colorbar(cs, ax=ax, fraction=0.046, pad=0.04)
+        cbar = fig.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
     cbar.set_label("Aplituda vlny")
-    try:
-        import numpy as _np_cbar
-        cbar.set_ticks(_np_cbar.arange(-1.0, 1.0 + 1e-9, 0.25))
-    except Exception:
-        pass
+    ticks = np.arange(-1.0, 1.0 + 1e-9, 0.25)
+    cbar.set_ticks(ticks)
+    cbar.formatter = FormatStrFormatter("%.2f")
+    cbar.update_ticks()
 
     # Axes formatting: exact data limits and ticks every 2.5 on both axes
     ax.set_xlim(x_min, x_max)
@@ -224,7 +242,7 @@ def generate_sinus(
     ax1.set_xlim(0.0, 4.0 * np.pi)
     ax1.set_ylim(-1.5, 1.5)
     ax1.set_yticks(np.arange(-1.5, 1.51, 0.5))
-    ax1.set_ylabel("value")
+    ax1.set_ylabel("f(x)")
     ax1.grid(True, alpha=0.25)
 
     # Subplot 2: min (dashed) and max colored by source function
@@ -257,14 +275,14 @@ def generate_sinus(
     try:
         ax2.set_xticklabels([
             "0",
-            r"$\\frac{\\pi}{2}$",
-            r"$\\pi$",
-            r"$\\frac{3\\pi}{2}$",
-            r"$2\\pi$",
-            r"$\\frac{5\\pi}{2}$",
-            r"$3\\pi$",
-            r"$\\frac{7\\pi}{2}$",
-            r"$4\\pi$",
+            r"$\frac{\pi}{2}$",
+            r"$\pi$",
+            r"$\frac{3\pi}{2}$",
+            r"$2\pi$",
+            r"$\frac{5\pi}{2}$",
+            r"$3\pi$",
+            r"$\frac{7\pi}{2}$",
+            r"$4\pi$",
         ])
     except Exception:
         ax2.set_xticklabels(["0", "π/2", "π", "3π/2", "2π", "5π/2", "3π", "7π/2", "4π"])  # robust fallback
@@ -403,8 +421,14 @@ if __name__ == "__main__":
             for _j, _yj in enumerate(_y):
                 _s = 0.0
                 for _sx, _sy in _src:
-                    _d2 = (_xi - float(_sx)) ** 2 + (_yj + float(_sy)) ** 2
-                    _s += _math.cos(_k * _d2) / (1.0 + _d2)
+                    _dx = _xi - float(_sx)
+                    _dy = _yj + float(_sy)
+                    _r2 = _dx * _dx + _dy * _dy
+                    _r = _math.sqrt(_r2)
+                    _c = _math.cos(_k * _r)
+                    # Match saturation used in vectorized implementation
+                    _c = (_c / abs(_c) if _c != 0.0 else 0.0) * (abs(_c) ** 0.15)
+                    _s += _c / (1.0 + _r2)
                 _Z[_i, _j] = _s
         return _Z
 
