@@ -38,11 +38,7 @@ def wave_inference(
 
         k = 2π / λ
         d^2_s[i, j] = (x[i] - S_s[0])^2 + (y[j] + S_s[1])^2
-        r_s[i, j]   = sqrt(d^2_s[i, j])
-        Z[i, j] = Σ_s shape(cos(k * r_s[i, j])) / (1 + d^2_s[i, j])
-
-    where ``shape(·)`` is a saturation mapping that thickens bright/dark ring
-    bands visually by pushing values toward ±1.
+        Z[i, j] = Σ_s cos(k * d^2_s[i, j]) / (1 + d^2_s[i, j])
 
     The implementation is fully vectorized using NumPy; no explicit Python loops
     over the grid points or sources are performed.
@@ -84,16 +80,12 @@ def wave_inference(
     # Per assignment: d^2 = (x - Sx)^2 + (y + Sy)^2
     dx = X[None, :, :] - sx
     dy = Y[None, :, :] + sy
-    r2 = dx * dx + dy * dy  # shape: (ns, nx, ny)
-    r = np.sqrt(r2)
+    d2 = dx * dx + dy * dy  # shape: (ns, nx, ny)
 
     k = 2.0 * np.pi / float(wavelength)
 
-    # Compute contribution per source with a saturation transform to thicken bands
-    c = np.cos(k * r)
-    # Stronger saturation (exp < 1) => thicker bright/dark regions (tunable)
-    c = np.sign(c) * (np.abs(c) ** 0.02)
-    contributions = c / (1.0 + r2)
+    # Compute contribution per source per assignment: cos(k * d^2) / (1 + d^2)
+    contributions = np.cos(k * d2) / (1.0 + d2)
     Z = np.sum(contributions, axis=0)
     return Z
 
@@ -425,12 +417,8 @@ if __name__ == "__main__":
                 for _sx, _sy in _src:
                     _dx = _xi - float(_sx)
                     _dy = _yj + float(_sy)
-                    _r2 = _dx * _dx + _dy * _dy
-                    _r = _math.sqrt(_r2)
-                    _c = _math.cos(_k * _r)
-                    # Match saturation used in vectorized implementation
-                    _c = (_c / abs(_c) if _c != 0.0 else 0.0) * (abs(_c) ** 0.02)
-                    _s += _c / (1.0 + _r2)
+                    _d2 = _dx * _dx + _dy * _dy
+                    _s += _math.cos(_k * _d2) / (1.0 + _d2)
                 _Z[_i, _j] = _s
         return _Z
 
