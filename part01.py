@@ -138,10 +138,13 @@ def plot_wave(
 
     fig, ax = plt.subplots(figsize=(7.5, 6))
 
-    # Normalize Z to [-1, 1] and apply mild gamma to thicken visual bands further
+    # Normalize Z to [-1, 1] and apply stronger shaping to thicken visual bands
     max_abs = float(np.max(np.abs(Z))) or 1.0
     Zn = Z / max_abs
-    Zn = np.sign(Zn) * (np.abs(Zn) ** 0.35)
+    # Heavier saturation via power-law (p < 1) and smooth tanh compression
+    Zn = np.sign(Zn) * (np.abs(Zn) ** 0.2)
+    _gain = 2.0
+    Zn = np.tanh(_gain * Zn) / np.tanh(_gain)
 
     # imshow expects matrix indexing (rows as Y), so transpose for consistent axes
     x_min, x_max = float(x.min()), float(x.max())
