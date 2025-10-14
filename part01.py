@@ -125,7 +125,7 @@ def plot_wave(
     """
     import matplotlib.pyplot as plt  # local import per assignment constraints
     from matplotlib.colors import Normalize
-    from matplotlib.ticker import FormatStrFormatter
+    from matplotlib.ticker import FormatStrFormatter, MultipleLocator, NullFormatter
 
     x = np.asarray(x)
     y = np.asarray(y)
@@ -170,10 +170,11 @@ def plot_wave(
     except Exception:
         cbar = fig.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
     cbar.set_label("Aplituda vlny")
-    ticks = np.arange(-1.0, 1.0 + 1e-9, 0.5)
-    cbar.set_ticks(ticks)
-    cbar.formatter = FormatStrFormatter("%.2f")
-    cbar.update_ticks()
+    # Keep tick step at 0.25 (minor), show labels at 0.5 (major) for larger spacing
+    cbar.ax.yaxis.set_minor_locator(MultipleLocator(0.25))
+    cbar.ax.yaxis.set_major_locator(MultipleLocator(0.5))
+    cbar.ax.yaxis.set_major_formatter(FormatStrFormatter("%.2f"))
+    cbar.ax.yaxis.set_minor_formatter(NullFormatter())
 
     # Axes formatting: exact data limits and ticks every 2.5 on both axes
     ax.set_xlim(x_min, x_max)
