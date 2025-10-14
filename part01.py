@@ -464,8 +464,13 @@ if __name__ == "__main__":
     # Example manual run (silent; no console output)
     X = np.linspace(-10, 10, 200)
     Y = np.linspace(-10, 10, 200)
-    S = np.array([[-3.0, 0.0], [3.0, 0.0], [0.0, 4.0]], dtype=float)
-    Z = wave_inference(X, Y, S, wavelength=2.0)
+    # Place two sources at the bottom (Sy > 0 => center at -Sy) and one at the top (Sy < 0)
+    S = np.array([
+        [-1.2,  0.9],  # bottom
+        [ 1.2,  0.9],  # bottom
+        [ 0.0, -0.9],  # top
+    ], dtype=float)
+    Z = wave_inference(X, Y, S, wavelength=0.85)
 
     # Save figures (not shown by default)
     try:
