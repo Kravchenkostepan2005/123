@@ -92,7 +92,7 @@ def wave_inference(
     # Compute contribution per source with a saturation transform to thicken bands
     c = np.cos(k * r)
     # Stronger saturation (exp < 1) => thicker bright/dark regions (tunable)
-    c = np.sign(c) * (np.abs(c) ** 0.06)
+    c = np.sign(c) * (np.abs(c) ** 0.04)
     contributions = c / (1.0 + r2)
     Z = np.sum(contributions, axis=0)
     return Z
@@ -142,29 +142,8 @@ def plot_wave(
     max_abs = float(np.max(np.abs(Z))) or 1.0
     Zn = np.clip(Z / max_abs, -1.0, 1.0)
 
-    # Spatially thicken bands without changing colormap: light Gaussian-like blur
-    # Apply blur separately to positive and negative parts to preserve sign layout
-    def _blur5x5(A: np.ndarray) -> np.ndarray:
-        k1 = np.array([1.0, 4.0, 6.0, 4.0, 1.0], dtype=np.float64)
-        K = (np.outer(k1, k1) / 256.0).astype(np.float64)
-        pad = 2
-        Ap = np.pad(A, pad_width=pad, mode="edge")
-        H, W = A.shape
-        out = np.zeros_like(A, dtype=np.float64)
-        # Explicit small-kernel convolution (25 taps)
-        for i in range(5):
-            for j in range(5):
-                out += K[i, j] * Ap[i:i+H, j:j+W]
-        return out
-
-    Zp = np.maximum(Zn, 0.0)
-    Zn_abs = -np.minimum(Zn, 0.0)
-    Zp_b = _blur5x5(Zp)
-    Zn_b = _blur5x5(Zn_abs)
-    Zn = Zp_b - Zn_b
-    # Re-normalize to keep full color range and avoid brightness change
-    max_abs = float(np.max(np.abs(Zn))) or 1.0
-    Zn = np.clip(Zn / max_abs, -1.0, 1.0)
+    # Note: No additional display shaping to keep colors unchanged; thickness
+    # is controlled in wave_inference via the power exponent.
 
     # imshow expects matrix indexing (rows as Y), so transpose for consistent axes
     x_min, x_max = float(x.min()), float(x.max())
@@ -450,7 +429,7 @@ if __name__ == "__main__":
                     _r = _math.sqrt(_r2)
                     _c = _math.cos(_k * _r)
                     # Match saturation used in vectorized implementation
-                    _c = (_c / abs(_c) if _c != 0.0 else 0.0) * (abs(_c) ** 0.06)
+                    _c = (_c / abs(_c) if _c != 0.0 else 0.0) * (abs(_c) ** 0.04)
                     _s += _c / (1.0 + _r2)
                 _Z[_i, _j] = _s
         return _Z
