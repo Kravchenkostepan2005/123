@@ -470,7 +470,7 @@ if __name__ == "__main__":
         [ 1.2,  0.9],  # bottom
         [ 0.0, -0.9],  # top
     ], dtype=float)
-    Z = wave_inference(X, Y, S, wavelength=0.85)
+    Z = wave_inference(X, Y, S, wavelength=3.0)
 
     # Save figures (not shown by default)
     try:
