@@ -92,7 +92,7 @@ def wave_inference(
     # Compute contribution per source with a saturation transform to thicken bands
     c = np.cos(k * r)
     # Stronger saturation (exp < 1) => thicker bright/dark regions (tunable)
-    c = np.sign(c) * (np.abs(c) ** 0.08)
+    c = np.sign(c) * (np.abs(c) ** 0.06)
     contributions = c / (1.0 + r2)
     Z = np.sum(contributions, axis=0)
     return Z
@@ -426,7 +426,7 @@ if __name__ == "__main__":
                     _r = _math.sqrt(_r2)
                     _c = _math.cos(_k * _r)
                     # Match saturation used in vectorized implementation
-                    _c = (_c / abs(_c) if _c != 0.0 else 0.0) * (abs(_c) ** 0.08)
+                    _c = (_c / abs(_c) if _c != 0.0 else 0.0) * (abs(_c) ** 0.06)
                     _s += _c / (1.0 + _r2)
                 _Z[_i, _j] = _s
         return _Z
