@@ -142,6 +142,30 @@ def plot_wave(
     max_abs = float(np.max(np.abs(Z))) or 1.0
     Zn = np.clip(Z / max_abs, -1.0, 1.0)
 
+    # Spatially thicken bands without changing colormap: light Gaussian-like blur
+    # Apply blur separately to positive and negative parts to preserve sign layout
+    def _blur5x5(A: np.ndarray) -> np.ndarray:
+        k1 = np.array([1.0, 4.0, 6.0, 4.0, 1.0], dtype=np.float64)
+        K = (np.outer(k1, k1) / 256.0).astype(np.float64)
+        pad = 2
+        Ap = np.pad(A, pad_width=pad, mode="edge")
+        H, W = A.shape
+        out = np.zeros_like(A, dtype=np.float64)
+        # Explicit small-kernel convolution (25 taps)
+        for i in range(5):
+            for j in range(5):
+                out += K[i, j] * Ap[i:i+H, j:j+W]
+        return out
+
+    Zp = np.maximum(Zn, 0.0)
+    Zn_abs = -np.minimum(Zn, 0.0)
+    Zp_b = _blur5x5(Zp)
+    Zn_b = _blur5x5(Zn_abs)
+    Zn = Zp_b - Zn_b
+    # Re-normalize to keep full color range and avoid brightness change
+    max_abs = float(np.max(np.abs(Zn))) or 1.0
+    Zn = np.clip(Zn / max_abs, -1.0, 1.0)
+
     # imshow expects matrix indexing (rows as Y), so transpose for consistent axes
     x_min, x_max = float(x.min()), float(x.max())
     y_min, y_max = float(y.min()), float(y.max())
