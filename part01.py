@@ -170,7 +170,7 @@ def plot_wave(
     except Exception:
         cbar = fig.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
     cbar.set_label("Aplituda vlny")
-    ticks = np.arange(-1.0, 1.0 + 1e-9, 0.25)
+    ticks = np.arange(-1.0, 1.0 + 1e-9, 0.5)
     cbar.set_ticks(ticks)
     cbar.formatter = FormatStrFormatter("%.2f")
     cbar.update_ticks()
