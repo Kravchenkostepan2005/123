@@ -31,17 +31,12 @@ def wave_inference(
     source: NDArray[Any],
     wavelength: float,
 ) -> NDArray[Any]:
-    """Compute the wave interference amplitude field.
+    """Compute the wave interference amplitude field on a Cartesian grid.
 
-    The amplitude field Z for points defined by coordinates ``x`` (X-axis) and
-    ``y`` (Y-axis) with multiple sources ``source`` is computed as:
-
-        k = 2π / λ
-        d^2_s[i, j] = (x[i] - S_s[0])^2 + (y[j] + S_s[1])^2
-        Z[i, j] = Σ_s cos(k * d^2_s[i, j]) / (1 + d^2_s[i, j])
-
-    The implementation is fully vectorized using NumPy; no explicit Python loops
-    over the grid points or sources are performed.
+    This implementation is fully vectorized (NumPy only) and produces a 2D
+    amplitude field ``Z`` of shape ``(len(x), len(y))`` for a set of point
+    sources. The coordinate convention is that the field is evaluated for all
+    pairs ``(x[i], y[j])``.
 
     Parameters
     ----------
@@ -50,14 +45,20 @@ def wave_inference(
     y : NDArray[Any]
         1D array of Y coordinates.
     source : NDArray[Any]
-        Array of shape (num_sources, 2) where each row is [x_s, y_s].
+        Array of shape ``(num_sources, 2)``; each row is ``[Sx, Sy]``.
     wavelength : float
-        Wavelength λ used to compute k = 2π/λ.
+        Wavelength ``λ`` (must be non-zero); wave number ``k = 2π/λ``.
 
     Returns
     -------
     NDArray[Any]
-        2D array of shape (len(x), len(y)) with the amplitude field Z.
+        2D array with the amplitude field ``Z`` of shape ``(len(x), len(y))``.
+
+    Notes
+    -----
+    - The squared distance per source is ``d2 = (x - Sx)^2 + (y + Sy)^2``.
+    - The field is computed as a sum of contributions
+      ``cos(k * d2) / (1 + d2)`` across all sources.
     """
     if wavelength == 0:
         raise ValueError("wavelength must be non-zero")
@@ -99,21 +100,27 @@ def plot_wave(
 ) -> None:
     """Visualize the wave field ``Z`` over coordinates ``x`` and ``y``.
 
-    The visualization aims to be similar to the reference: proper axis ranges,
-    aligned colorbar, and an equal aspect ratio so the grid is not distorted.
+    This helper draws an equal-aspect image with the viridis colormap, a
+    rectangular colorbar labeled "Aplituda vlny" with tick labels from -1.00
+    to 1.00 in steps of 0.25, axis ticks every 2.5, and the title "Vlnové pole".
 
     Parameters
     ----------
     Z : NDArray[Any]
-        2D amplitude field of shape (len(x), len(y)).
+        2D amplitude field of shape ``(len(x), len(y))``.
     x : NDArray[Any]
-        1D array of X coordinates (used for axis extent).
+        1D array of X coordinates (defines x-extent and ticks).
     y : NDArray[Any]
-        1D array of Y coordinates (used for axis extent).
+        1D array of Y coordinates (defines y-extent and ticks).
     show_figure : bool, optional
-        If True, displays the figure via ``plt.show()``.
+        If ``True``, shows the figure using ``plt.show()``. Default: ``False``.
     save_path : str | None, optional
-        If provided, saves the figure to this path via ``plt.savefig()``.
+        If provided, saves the figure to this path (e.g., ``"wave.png"``).
+
+    Raises
+    ------
+    ValueError
+        If ``Z.shape != (len(x), len(y))``.
     """
     import matplotlib.pyplot as plt  # local import per assignment constraints
     from matplotlib.colors import Normalize
@@ -207,18 +214,18 @@ def generate_sinus(
 ) -> None:
     """Create a two-panel figure for sin(x) and cos(x) on [0, 4π].
 
-    - First subplot: plot sin(x) and cos(x), and fill the area between them.
-    - Second subplot: dashed line showing ``min(sin, cos)`` and a colored line
-      for ``max(sin, cos)`` where the color indicates which function attains the
-      maximum (orange for cos, blue for sin). The x and y axes are shared
-      between subplots, and the x-axis ticks use LaTeX-like labels.
+    Top panel shows ``sin(x)`` and ``cos(x)`` in gray with a green
+    fill-between. Bottom panel shows a dashed ``min(sin, cos)`` and a colored
+    ``max(sin, cos)`` (orange when ``cos`` dominates, blue when ``sin`` does).
+    Axes are shared, y-range is [-1.5, 1.5] with 0.5 step, and x-ticks are set
+    at multiples of ``π/2`` using LaTeX labels (with a safe fallback).
 
     Parameters
     ----------
     show_figure : bool, optional
-        If True, displays the figure via ``plt.show()``.
+        If ``True``, shows the figure via ``plt.show()``. Default: ``False``.
     save_path : str | None, optional
-        If provided, saves the figure to this path via ``plt.savefig()``.
+        If provided, saves the figure to this path (e.g., ``"sinus.png"``).
     """
     import matplotlib.pyplot as plt  # local import per assignment constraints
 
@@ -307,11 +314,25 @@ _STATIONS_HTML = _BASE_URL + "st_zemepis_cz.html"
 
 
 def _parse_cz_decimal(value: str) -> float:
-    """Parse a Czech-formatted decimal number to float.
+    """Parse a Czech-formatted decimal string to float.
 
-    This helper accepts strings like "49,365°" or "1\u00a0221,50" with various
-    non-numeric decorations and converts them to a Python float using '.' as
-    the decimal separator.
+    Accepts values like ``"49,365°"`` or ``"1\u00a0221,50"`` and normalizes
+    them to a standard dot-based decimal representation.
+
+    Parameters
+    ----------
+    value : str
+        String containing a Czech-formatted decimal number.
+
+    Returns
+    -------
+    float
+        Parsed decimal value.
+
+    Raises
+    ------
+    ValueError
+        If ``value`` is ``None`` or cannot be parsed into a float.
     """
     if value is None:
         raise ValueError("value is None")
@@ -330,20 +351,25 @@ def _parse_cz_decimal(value: str) -> float:
 
 
 def download_data() -> Dict[str, List[Any]]:
-    """Download the station table via the FIT VUT proxy and return parsed data.
+    """Download and parse the meteorological stations table via FIT VUT proxy.
 
-    The function accesses the proxy page (not the official CHMI domain) and
-    extracts the following columns into a dictionary of lists:
-
-    - positions: station names (str)
-    - lats: latitude in decimal degrees (float)
-    - longs: longitude in decimal degrees (float)
-    - heights: elevation in meters (float)
+    The source is a proxy page under ``https://ehw.fit.vutbr.cz/izv/`` (access
+    to the official CHMI domain is prohibited by the assignment). The function
+    parses tables on the page and returns a dictionary of column lists.
 
     Returns
     -------
     Dict[str, List[Any]]
-        Dictionary with keys 'positions', 'lats', 'longs', 'heights'.
+        Dictionary with keys:
+        - ``positions`` (List[str]) — station names
+        - ``lats`` (List[float]) — latitude in decimal degrees
+        - ``longs`` (List[float]) — longitude in decimal degrees
+        - ``heights`` (List[float]) — elevation in meters
+
+    Raises
+    ------
+    RuntimeError
+        If no station rows are parsed from the proxy page.
     """
     import requests
     from bs4 import BeautifulSoup
