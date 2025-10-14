@@ -129,6 +129,9 @@ def plot_wave(
         )
 
     fig, ax = plt.subplots(figsize=(7.5, 6))
+    # Ensure square data area and shrink the plotted square without changing scale
+    ax.set_box_aspect(1.0)
+    ax.set_position([0.18, 0.18, 0.48, 0.48])
 
     # Normalize Z to [-1, 1] with linear mapping so colors reflect amplitude
     max_abs = float(np.max(np.abs(Z))) or 1.0
