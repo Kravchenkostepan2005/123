@@ -156,7 +156,7 @@ def plot_wave(
         extent=extent,
         origin="lower",
         aspect="equal",
-        cmap="YlGn",
+        cmap="viridis",
         norm=Normalize(vmin=-1.0, vmax=1.0),
         interpolation="bicubic",
     )
