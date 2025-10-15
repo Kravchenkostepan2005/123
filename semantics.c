@@ -54,8 +54,10 @@ static int is_first_child(Node *parent, Node *child) {
 }
 
 static int token_equals(const Token *tok, const char *s) {
-    if (!tok || !tok->lexeme || !s) return 0;
-    return strcmp(tok->lexeme, s) == 0;
+    if (!tok || !s) return 0;
+    const char *id = SEM_GET_IDENT_CSTR(tok);
+    if (!id) return 0;
+    return strcmp(id, s) == 0;
 }
 
 SemError check_prolog_and_rules_ex(Node *program_root, FILE *errout, IfjSemPrologRuleReason *reason_out) {
@@ -95,7 +97,7 @@ SemError check_prolog_and_rules_ex(Node *program_root, FILE *errout, IfjSemProlo
     Node *klass = first_direct_child(program_root, CLASS_NT);
 
     // Optional: ensure class name token is "Program" if present at the CLASS_NT node
-    if (klass && klass->token && klass->token->lexeme) {
+    if (klass && klass->token && SEMANTICS_CHECK_CLASS_NAME) {
         if (!token_equals(klass->token, "Program")) {
             if (errout) fprintf(errout, "SEMANTICS: Top-level class must be named 'Program'\n");
             if (reason_out) *reason_out = IFJ_SEM_PR_CLASS_NAME_NOT_PROGRAM;

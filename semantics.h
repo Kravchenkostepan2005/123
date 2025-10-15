@@ -4,6 +4,18 @@
 #include <stdio.h>
 #include "ast.h"
 
+// Optional integration macros (override in your build if needed)
+// Set to 1 to enforce class name == "Program" and provide SEM_GET_IDENT_CSTR
+#ifndef SEMANTICS_CHECK_CLASS_NAME
+#define SEMANTICS_CHECK_CLASS_NAME 0
+#endif
+
+// Provide a way to extract identifier C-string from your Token
+// Default returns NULL (disables name comparison without changing your Token)
+#ifndef SEM_GET_IDENT_CSTR
+#define SEM_GET_IDENT_CSTR(tok) (NULL)
+#endif
+
 // SEMANTIC-ONLY error codes for the semantics module (subset of IFJ25):
 //  0 – OK (no errors)
 //  3 – Semantic error – use of undefined function/variable
