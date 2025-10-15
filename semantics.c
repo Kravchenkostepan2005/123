@@ -9,7 +9,6 @@ const char *ifj_sem_error_name(IfjSemErrorCode code) {
         case IFJ_SEM_BAD_CALL_OR_BUILTIN_PARAM: return "SEM_BAD_CALL_OR_BUILTIN_PARAM";
         case IFJ_SEM_TYPE_COMPAT: return "SEM_TYPE_COMPAT";
         case IFJ_SEM_OTHER: return "SEM_OTHER";
-        case IFJ_SEM_INTERNAL: return "SEM_INTERNAL";
         default: return "SEM_UNKNOWN";
     }
 }
@@ -43,7 +42,7 @@ static int token_equals(const Token *tok, const char *s) {
 SemError check_prolog_and_rules(Node *program_root, FILE *errout) {
     if (!program_root) {
         if (errout) fprintf(errout, "SEMANTICS: null PROGRAM root\n");
-        return IFJ_SEM_INTERNAL;
+        return IFJ_SEM_OTHER;
     }
     if (program_root->nonterminal != PROGRAM) {
         if (errout) fprintf(errout, "SEMANTICS: invalid PROGRAM root\n");
