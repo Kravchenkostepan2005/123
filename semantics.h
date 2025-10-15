@@ -18,7 +18,8 @@ typedef enum ifj_sem_error_code {
     IFJ_SEM_REDEFINITION = 4,
     IFJ_SEM_BAD_CALL_OR_BUILTIN_PARAM = 5,
     IFJ_SEM_TYPE_COMPAT = 6,
-    IFJ_SEM_OTHER = 10
+    IFJ_SEM_OTHER = 10,
+    IFJ_SEM_INTERNAL = 99
 } IfjSemErrorCode;
 
 // Backward-compatible alias
