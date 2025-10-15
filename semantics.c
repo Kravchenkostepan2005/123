@@ -1,0 +1,65 @@
+#include <string.h>
+#include "semantics.h"
+
+static int count_direct_children_with(Node *node, Nonterminal_type nt) {
+    int count = 0;
+    if (!node) return 0;
+    for (Node *ch = node->left_child; ch != NULL; ch = ch->right_sibling) {
+        if (ch->nonterminal == nt) count++;
+    }
+    return count;
+}
+
+static Node* first_direct_child(Node *node, Nonterminal_type nt) {
+    if (!node) return NULL;
+    for (Node *ch = node->left_child; ch != NULL; ch = ch->right_sibling) {
+        if (ch->nonterminal == nt) return ch;
+    }
+    return NULL;
+}
+
+static int is_first_child(Node *parent, Node *child) {
+    return parent && parent->left_child == child;
+}
+
+static int token_equals(const Token *tok, const char *s) {
+    if (!tok || !tok->lexeme || !s) return 0;
+    return strcmp(tok->lexeme, s) == 0;
+}
+
+SemError check_prolog_and_rules(Node *program_root, FILE *errout) {
+    if (!program_root || program_root->nonterminal != PROGRAM) {
+        if (errout) fprintf(errout, "INTERNAL: root is null or not PROGRAM\n");
+        return SEM_INTERNAL;
+    }
+
+    // Exactly one PROLOG under PROGRAM
+    int prolog_count = count_direct_children_with(program_root, PROLOG);
+    if (prolog_count != 1) {
+        if (errout) fprintf(errout, "SYNTAX: Expected exactly one PROLOG, got %d\n", prolog_count);
+        return SEM_SYNTAX;
+    }
+    Node *prolog = first_direct_child(program_root, PROLOG);
+    if (!is_first_child(program_root, prolog)) {
+        if (errout) fprintf(errout, "SYNTAX: PROLOG must be the first child of PROGRAM\n");
+        return SEM_SYNTAX;
+    }
+
+    // Exactly one CLASS_NT under PROGRAM
+    int class_count = count_direct_children_with(program_root, CLASS_NT);
+    if (class_count != 1) {
+        if (errout) fprintf(errout, "SYNTAX: Expected exactly one class skeleton (CLASS_NT), got %d\n", class_count);
+        return SEM_SYNTAX;
+    }
+    Node *klass = first_direct_child(program_root, CLASS_NT);
+
+    // Optional: ensure class name token is "Program" if present at the CLASS_NT node
+    if (klass && klass->token && klass->token->lexeme) {
+        if (!token_equals(klass->token, "Program")) {
+            if (errout) fprintf(errout, "SYNTAX: Top-level class must be named 'Program'\n");
+            return SEM_SYNTAX;
+        }
+    }
+
+    return SEM_OK;
+}
