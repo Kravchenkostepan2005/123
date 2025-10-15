@@ -22,7 +22,7 @@ int main(){
 
     SemError err = check_prolog_and_rules(root, stderr);
     if (err != SEM_OK) {
-        fprintf(stderr, "Failed with code %d\n", err);
+        fprintf(stderr, "Failed with code %d (%s)\n", err, ifj_error_name(err));
         return err;
     }
     puts("OK");
