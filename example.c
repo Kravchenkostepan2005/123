@@ -21,8 +21,8 @@ int main(){
     insert_child(root, CLASS_NT, &classTok);
 
     SemError err = check_prolog_and_rules(root, stderr);
-    if (err != SEM_OK) {
-        fprintf(stderr, "Failed with code %d (%s)\n", err, ifj_error_name(err));
+    if (err != IFJ_SEM_OK) {
+        fprintf(stderr, "Failed with code %d (%s)\n", err, ifj_sem_error_name(err));
         return err;
     }
     puts("OK");

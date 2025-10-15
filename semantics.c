@@ -1,20 +1,15 @@
 #include <string.h>
 #include "semantics.h"
 
-const char *ifj_error_name(IfjErrorCode code) {
+const char *ifj_sem_error_name(IfjSemErrorCode code) {
     switch (code) {
-        case IFJ_OK: return "OK";
-        case IFJ_LEX_ERROR: return "LEX_ERROR";
-        case IFJ_SYNTACTIC_ERROR: return "SYNTACTIC_ERROR";
+        case IFJ_SEM_OK: return "SEM_OK";
         case IFJ_SEM_UNDEFINED: return "SEM_UNDEFINED";
         case IFJ_SEM_REDEFINITION: return "SEM_REDEFINITION";
         case IFJ_SEM_BAD_CALL_OR_BUILTIN_PARAM: return "SEM_BAD_CALL_OR_BUILTIN_PARAM";
         case IFJ_SEM_TYPE_COMPAT: return "SEM_TYPE_COMPAT";
         case IFJ_SEM_OTHER: return "SEM_OTHER";
-        case IFJ_INTERNAL_ERROR: return "INTERNAL_ERROR";
-        case IFJ_RT_BAD_BUILTIN_PARAM: return "RT_BAD_BUILTIN_PARAM";
-        case IFJ_RT_TYPE_COMPAT: return "RT_TYPE_COMPAT";
-        default: return "UNKNOWN";
+        default: return "SEM_UNKNOWN";
     }
 }
 
@@ -46,8 +41,8 @@ static int token_equals(const Token *tok, const char *s) {
 
 SemError check_prolog_and_rules(Node *program_root, FILE *errout) {
     if (!program_root || program_root->nonterminal != PROGRAM) {
-        if (errout) fprintf(errout, "INTERNAL: root is null or not PROGRAM\n");
-        return SEM_INTERNAL;
+        if (errout) fprintf(errout, "SEMANTICS: invalid PROGRAM root\n");
+        return IFJ_SEM_OTHER;
     }
 
     // Exactly one PROLOG under PROGRAM
@@ -78,5 +73,5 @@ SemError check_prolog_and_rules(Node *program_root, FILE *errout) {
         }
     }
 
-    return SEM_OK;
+    return IFJ_SEM_OK;
 }
