@@ -40,6 +40,15 @@ typedef enum ifj_sem_prolog_rule_reason {
 // Human-readable name for the prolog/rules reason
 const char *ifj_sem_prolog_rule_reason_name(IfjSemPrologRuleReason reason);
 
+// Runtime semantic error codes for the generated program (for completeness)
+typedef enum ifj_sem_runtime_error_code {
+    IFJ_RT_BAD_BUILTIN_PARAM = 25,
+    IFJ_RT_TYPE_COMPAT = 26
+} IfjSemRuntimeErrorCode;
+
+// Human-readable name for runtime semantic error code
+const char *ifj_sem_runtime_error_name(IfjSemRuntimeErrorCode code);
+
 // Validates high-level semantics: prolog and top-level rules
 // Returns IFJ_SEM_OK or a semantic error code above (never lexical/syntax/runtime).
 // Extended API that also provides the specific reason for failure/success

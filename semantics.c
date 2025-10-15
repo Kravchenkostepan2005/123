@@ -24,6 +24,14 @@ const char *ifj_sem_prolog_rule_reason_name(IfjSemPrologRuleReason reason) {
     }
 }
 
+const char *ifj_sem_runtime_error_name(IfjSemRuntimeErrorCode code) {
+    switch (code) {
+        case IFJ_RT_BAD_BUILTIN_PARAM: return "RT_BAD_BUILTIN_PARAM";
+        case IFJ_RT_TYPE_COMPAT: return "RT_TYPE_COMPAT";
+        default: return "RT_UNKNOWN";
+    }
+}
+
 static int count_direct_children_with(Node *node, Nonterminal_type nt) {
     int count = 0;
     if (!node) return 0;
