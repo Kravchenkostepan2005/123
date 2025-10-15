@@ -53,28 +53,28 @@ SemError check_prolog_and_rules(Node *program_root, FILE *errout) {
     // Exactly one PROLOG under PROGRAM
     int prolog_count = count_direct_children_with(program_root, PROLOG);
     if (prolog_count != 1) {
-        if (errout) fprintf(errout, "SYNTAX: Expected exactly one PROLOG, got %d\n", prolog_count);
-        return SEM_SYNTAX;
+        if (errout) fprintf(errout, "SEMANTICS: Expected exactly one PROLOG, got %d\n", prolog_count);
+        return IFJ_SEM_OTHER;
     }
     Node *prolog = first_direct_child(program_root, PROLOG);
     if (!is_first_child(program_root, prolog)) {
-        if (errout) fprintf(errout, "SYNTAX: PROLOG must be the first child of PROGRAM\n");
-        return SEM_SYNTAX;
+        if (errout) fprintf(errout, "SEMANTICS: PROLOG must be the first child of PROGRAM\n");
+        return IFJ_SEM_OTHER;
     }
 
     // Exactly one CLASS_NT under PROGRAM
     int class_count = count_direct_children_with(program_root, CLASS_NT);
     if (class_count != 1) {
-        if (errout) fprintf(errout, "SYNTAX: Expected exactly one class skeleton (CLASS_NT), got %d\n", class_count);
-        return SEM_SYNTAX;
+        if (errout) fprintf(errout, "SEMANTICS: Expected exactly one class skeleton (CLASS_NT), got %d\n", class_count);
+        return IFJ_SEM_OTHER;
     }
     Node *klass = first_direct_child(program_root, CLASS_NT);
 
     // Optional: ensure class name token is "Program" if present at the CLASS_NT node
     if (klass && klass->token && klass->token->lexeme) {
         if (!token_equals(klass->token, "Program")) {
-        if (errout) fprintf(errout, "SYNTAX: Top-level class must be named 'Program'\n");
-            return SEM_SYNTAX;
+            if (errout) fprintf(errout, "SEMANTICS: Top-level class must be named 'Program'\n");
+            return IFJ_SEM_OTHER;
         }
     }
 
