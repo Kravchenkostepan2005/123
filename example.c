@@ -20,9 +20,10 @@ int main(){
     Token classTok = make_ident("Program");
     insert_child(root, CLASS_NT, &classTok);
 
-    SemError err = check_prolog_and_rules(root, stderr);
+    IfjSemPrologRuleReason reason;
+    SemError err = check_prolog_and_rules_ex(root, stderr, &reason);
     if (err != IFJ_SEM_OK) {
-        fprintf(stderr, "Failed with code %d (%s)\n", err, ifj_sem_error_name(err));
+        fprintf(stderr, "Failed with code %d (%s), reason %s\n", err, ifj_sem_error_name(err), ifj_sem_prolog_rule_reason_name(reason));
         return err;
     }
     puts("OK");
