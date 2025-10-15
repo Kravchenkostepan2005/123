@@ -8,10 +8,9 @@
 // The real project should provide these in "scanner.h" and "ast.h".
 struct Token; // opaque to the semantic analyzer
 
-// Opaque AST types; include real ast.h in the translation unit using the analyzer.
-// We only need the struct layout names here for pointers; full definition stays in ast.h
-typedef struct node Node;
-typedef enum nonterminals Nonterminal_type;
+// Opaque AST forward declarations; full definitions live in ast.h.
+struct node;           // AST node
+enum nonterminals;     // Nonterminal tags
 
 #ifdef __cplusplus
 extern "C" {
@@ -85,7 +84,7 @@ typedef struct SemanticsConfig {
 
 // Analyze the AST rooted at `root` and emit diagnostics into `out_messages`.
 // Returns 0 on success, non-zero on fatal internal error.
-int semantics_analyze(Node *root, const SemanticsConfig *config, SemanticMessages *out_messages);
+int semantics_analyze(struct node *root, const SemanticsConfig *config, SemanticMessages *out_messages);
 
 // Release memory owned by the diagnostics vector.
 void semantics_free_messages(SemanticMessages *messages);
