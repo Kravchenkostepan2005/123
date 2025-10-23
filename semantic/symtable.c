@@ -176,6 +176,17 @@ Symbol* symbol_table_lookup_current(SymbolTable* table, const char* name) {
     return NULL;
 }
 
+void symbol_table_for_each(SymbolTable* table, void (*cb)(Symbol* sym, void* user_data), void* user_data) {
+    if (!cb) return;
+    for (Scope* scope = table->current; scope; scope = scope->parent) {
+        for (size_t i = 0; i < scope->bucket_count; ++i) {
+            for (Symbol* s = scope->buckets[i]; s; s = s->next_in_bucket) {
+                cb(s, user_data);
+            }
+        }
+    }
+}
+
 FunctionType* function_type_create(Type return_type) {
     FunctionType* fn = (FunctionType*)malloc(sizeof(FunctionType));
     fn->return_type = return_type;

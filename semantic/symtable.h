@@ -66,6 +66,9 @@ Symbol* symbol_table_lookup(SymbolTable* table, const char* name);
 // Lookup only in current scope
 Symbol* symbol_table_lookup_current(SymbolTable* table, const char* name);
 
+// Iterate all symbols in all visible scopes (from current up to root)
+void symbol_table_for_each(SymbolTable* table, void (*cb)(Symbol* sym, void* user_data), void* user_data);
+
 // Helpers
 FunctionType* function_type_create(Type return_type);
 void function_type_add_param(FunctionType* fn, const char* name, Type type);
