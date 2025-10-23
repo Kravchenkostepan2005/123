@@ -76,6 +76,41 @@ static int analyze_statement(const void* node, const AstAdapter* ad, SymbolTable
             }
             return SEM_OK;
         }
+        case AN_NODE_CALL: {
+            const char* fname = ad->get_call_function_name ? ad->get_call_function_name(node) : NULL;
+            if (!fname) {
+                append_error(errbuf, n, "Invalid call node (missing name)\n");
+                return ERR_INTERNAL;
+            }
+            Symbol* s = symbol_table_lookup(sym, fname);
+            if (!s || s->kind != SYMBOL_FUNCTION) {
+                append_error(errbuf, n, "Call to undefined function\n");
+                return SEM_ERR_UNDEFINED_FUNCTION;
+            }
+            FunctionType* fn = s->as.function_type;
+            int expected = fn->param_count;
+            int seen = 0;
+            const void* args_node = ad->get_call_args_node ? ad->get_call_args_node(node) : NULL;
+            const void* arg = args_node ? ad->first_child(args_node) : NULL;
+            ParamSpec* spec = fn->params;
+            while (arg && spec) {
+                Type argt = make_type(TYPE_UNKNOWN);
+                if (ad->infer_expression_type && !ad->infer_expression_type(arg, sym, &argt, errbuf, n)) {
+                    return SEM_ERR_TYPE_MISMATCH;
+                }
+                if (!type_is_assignable(spec->type, argt)) {
+                    return type_error("function argument", spec->type, argt, errbuf, n);
+                }
+                seen += 1;
+                arg = ad->next_sibling(arg);
+                spec = spec->next;
+            }
+            if (seen != expected || spec != NULL || arg != NULL) {
+                append_error(errbuf, n, "Wrong number of arguments in call\n");
+                return SEM_ERR_TYPE_MISMATCH;
+            }
+            return SEM_OK;
+        }
         case AN_NODE_BLOCK: {
             return analyze_block(node, ad, sym, current_function_return, errbuf, n);
         }
@@ -98,6 +133,17 @@ static int analyze_block(const void* block_node, const AstAdapter* ad, SymbolTab
     }
     symbol_table_leave_scope(sym);
     return SEM_OK;
+}
+
+static bool block_contains_return(const void* block_node, const AstAdapter* ad) {
+    const void* child = ad->first_child(block_node);
+    while (child) {
+        int k = ad->get_node_kind(child);
+        if (k == AN_NODE_RETURN) return true;
+        if (k == AN_NODE_BLOCK && block_contains_return(child, ad)) return true;
+        child = ad->next_sibling(child);
+    }
+    return false;
 }
 
 static int collect_function_declarations(const void* root, const AstAdapter* ad, SymbolTable* sym, char* errbuf, size_t n) {
@@ -165,6 +211,12 @@ static int analyze_function_bodies(const void* root, const AstAdapter* ad, Symbo
                 int rc = analyze_block(body, ad, sym, fn->return_type, errbuf, n);
                 symbol_table_leave_scope(sym);
                 if (rc != SEM_OK) return rc;
+
+                // simple check: non-void functions must contain at least one return
+                if (fn->return_type.kind != TYPE_VOID && !block_contains_return(body, ad)) {
+                    append_error(errbuf, n, "Missing return in non-void function\n");
+                    return SEM_ERR_MISSING_RETURN;
+                }
             }
         }
         node = ad->next_sibling(node);

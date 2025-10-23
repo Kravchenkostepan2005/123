@@ -56,6 +56,10 @@ typedef struct AstAdapter {
     // Return helpers
     const void* (*get_return_expr_node)(const void* return_node);
 
+    // Call helpers
+    const char* (*get_call_function_name)(const void* call_node);
+    const void* (*get_call_args_node)(const void* call_node);
+
     // Expression typing callback (optional but recommended)
     bool (*infer_expression_type)(const void* expr_node, struct SymbolTable* symbols, Type* out_type, char* errbuf, size_t errbuf_size);
 } AstAdapter;

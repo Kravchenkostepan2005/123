@@ -114,6 +114,8 @@ const AstAdapter DEMO_ADAPTER = {
     .get_assign_target_name = get_assign_target_name,
     .get_assign_value_expr_node = get_assign_value_expr_node,
     .get_return_expr_node = get_return_expr_node,
+    .get_call_function_name = NULL,
+    .get_call_args_node = NULL,
     .infer_expression_type = infer_expression_type
 };
 
