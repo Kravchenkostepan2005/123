@@ -3,6 +3,16 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+// local helper to duplicate C-strings without non-standard strdup
+static char *dup_cstr(const char *s) {
+    if (!s) return NULL;
+    size_t n = strlen(s) + 1;
+    char *p = (char *)malloc(n);
+    if (!p) return NULL;
+    memcpy(p, s, n);
+    return p;
+}
+
 SemanticContext* semantic_init(void) {
     SemanticContext *context = malloc(sizeof(SemanticContext));
     if (!context) return NULL;
@@ -56,7 +66,7 @@ int enter_class_scope(SemanticContext *context, const char *class_name) {
     context->class_symtable = symtable_create();
     if (!context->class_symtable) return INTERNAL_ERROR;
 
-    context->current_class = strdup(class_name);
+    context->current_class = dup_cstr(class_name);
     context->in_class = true;
     return 0;
 }
@@ -109,12 +119,12 @@ int add_symbol(SemanticContext *context, const char *name, SymbolType type,
     Symbol *symbol = malloc(sizeof(Symbol));
     if (!symbol) return INTERNAL_ERROR;
 
-    symbol->name = strdup(name);
+    symbol->name = dup_cstr(name);
     symbol->type = type;
     symbol->data_type = TYPE_DYNAMIC;
     symbol->param_count = param_count;
     symbol->is_defined = 1;
-    symbol->class_name = class_name ? strdup(class_name) : NULL;
+    symbol->class_name = class_name ? dup_cstr(class_name) : NULL;
     symbol->members = NULL;
 
     if (type == SYMBOL_CLASS) {
@@ -313,12 +323,12 @@ int analyze_method(SemanticContext *context, Node *node, const char *class_name)
     Symbol *symbol = malloc(sizeof(Symbol));
     if (!symbol) return INTERNAL_ERROR;
 
-    symbol->name = strdup(method_name);
+    symbol->name = dup_cstr(method_name);
     symbol->type = SYMBOL_METHOD;
     symbol->data_type = TYPE_DYNAMIC;
     symbol->param_count = param_count;
     symbol->is_defined = 1;
-    symbol->class_name = strdup(class_name);
+    symbol->class_name = dup_cstr(class_name);
     symbol->members = NULL;
 
     if (symtable_insert(context->class_symtable, method_name, symbol) != 0) {
@@ -360,12 +370,12 @@ int analyze_getter(SemanticContext *context, Node *node, const char *class_name)
     Symbol *symbol = malloc(sizeof(Symbol));
     if (!symbol) return INTERNAL_ERROR;
 
-    symbol->name = strdup(getter_name);
+    symbol->name = dup_cstr(getter_name);
     symbol->type = SYMBOL_GETTER;
     symbol->data_type = TYPE_DYNAMIC;
     symbol->param_count = 0;
     symbol->is_defined = 1;
-    symbol->class_name = strdup(class_name);
+    symbol->class_name = dup_cstr(class_name);
     symbol->members = NULL;
 
     if (symtable_insert(context->class_symtable, getter_name, symbol) != 0) {
@@ -395,12 +405,12 @@ int analyze_setter(SemanticContext *context, Node *node, const char *class_name)
     Symbol *symbol = malloc(sizeof(Symbol));
     if (!symbol) return INTERNAL_ERROR;
 
-    symbol->name = strdup(setter_name);
+    symbol->name = dup_cstr(setter_name);
     symbol->type = SYMBOL_SETTER;
     symbol->data_type = TYPE_DYNAMIC;
     symbol->param_count = 1;
     symbol->is_defined = 1;
-    symbol->class_name = strdup(class_name);
+    symbol->class_name = dup_cstr(class_name);
     symbol->members = NULL;
 
     if (symtable_insert(context->class_symtable, setter_name, symbol) != 0) {
