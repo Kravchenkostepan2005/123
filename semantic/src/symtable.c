@@ -17,6 +17,15 @@ struct symtable {
     SymEntry **buckets;
 };
 
+static char *dup_cstr(const char *s) {
+    if (!s) return NULL;
+    size_t n = strlen(s) + 1;
+    char *p = (char *)malloc(n);
+    if (!p) return NULL;
+    memcpy(p, s, n);
+    return p;
+}
+
 static unsigned long hash_str(const char *s) {
     unsigned long h = 5381;
     int c;
@@ -75,7 +84,7 @@ int symtable_insert(symtable_t *table, const char *key, Symbol *symbol) {
     }
     SymEntry *ne = (SymEntry *)malloc(sizeof(SymEntry));
     if (!ne) return -1;
-    ne->key = strdup(key);
+    ne->key = dup_cstr(key);
     ne->symbol = symbol;
     ne->next = head;
     table->buckets[h] = ne;
