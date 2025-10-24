@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SEMANTIC_H
+#define SEMANTIC_H
 #include <stdbool.h>
 
 // Forward declarations
@@ -139,3 +140,5 @@ int analyze_getter(SemanticContext *context, Node *node, const char *class_name)
 int analyze_setter(SemanticContext *context, Node *node, const char *class_name);
 int analyze_node(SemanticContext *context, Node *node);
 int semantic_analyze(Node *ast);
+
+#endif // SEMANTIC_H
