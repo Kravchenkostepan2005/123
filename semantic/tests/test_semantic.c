@@ -4,10 +4,18 @@
 #include <string.h>
 #include "semantic.h"
 
+static char *dup_cstr(const char *s) {
+    if (!s) return NULL;
+    size_t n = strlen(s) + 1;
+    char *p = (char *)malloc(n);
+    memcpy(p, s, n);
+    return p;
+}
+
 static Token *tok_ident(const char *name) {
     Token *t = (Token *)malloc(sizeof(Token));
     t->type = IDENTIFIER;
-    t->data.characters = strdup(name);
+    t->data.characters = dup_cstr(name);
     return t;
 }
 
@@ -21,7 +29,7 @@ static Token *tok_num(double v) {
 static Token *tok_str(const char *s) {
     Token *t = (Token *)malloc(sizeof(Token));
     t->type = STRING_TYPE;
-    t->data.characters = strdup(s);
+    t->data.characters = dup_cstr(s);
     return t;
 }
 
@@ -57,12 +65,8 @@ static Node *build_valid_program(void) {
 
     // function decl: main() -> left is header, right is body
     Node *fn_id = node_new(FUNCNAME, tok_ident("main"), NULL, NULL);
-    Node *fn_head = node_new(FUNCDECL, NULL, node_new(FUNCDECL, fn_id, NULL, NULL), NULL);
-    // emulate header shape expected by analyzer: left_child->left_child is id
-    fn_head->left_child = node_new(FUNCDECL, NULL, fn_id, NULL);
-    fn_head->left_child->right_child = NULL; // no params
-
-    Node *fn_decl = node_new(FUNCDECL, NULL, fn_head->left_child, block);
+    Node *hdr = node_new(FUNCDECL, NULL, fn_id, NULL); // header: left=id, right=params(NULL)
+    Node *fn_decl = node_new(FUNCDECL, NULL, hdr, block);
 
     // program: left=function, right=NULL
     Node *program = node_new(PROGRAM, NULL, fn_decl, NULL);
@@ -83,7 +87,7 @@ static Node *build_main_with_param(void) {
     Node *param = node_new(TERM, tok_ident("a"), NULL, NULL);
 
     Node *fn_id = node_new(FUNCNAME, tok_ident("main"), NULL, NULL);
-    Node *hdr = node_new(FUNCDECL, NULL, fn_id, param); // param is right side of left_child in analyzer
+    Node *hdr = node_new(FUNCDECL, NULL, fn_id, param); // header: right_child is param list
     Node *fn_decl = node_new(FUNCDECL, NULL, hdr, node_new(BLOCK, NULL, NULL, NULL));
 
     Node *program = node_new(PROGRAM, NULL, fn_decl, NULL);
