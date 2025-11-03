@@ -363,6 +363,10 @@ export default function App() {
     setTermsData((prev) => prev.map((term) => (term.id === id ? { ...term, status: newStatus } : term)));
   };
 
+  const handleInstructorsSearchChange = (event) => {
+    setInstructorsSearch(event.target.value);
+  };
+
   const handleDeleteTerm = (id) => {
     setTermsData((prev) => prev.filter((term) => term.id !== id));
   };
@@ -979,14 +983,15 @@ export default function App() {
     );
 
     const InstructorsSection = () => {
+      const searchQuery = instructorsSearch.toLowerCase();
       const filteredInstructors = instructorsData.filter((instructor) => {
-        const query = instructorsSearch.trim().toLowerCase();
-        if (!query) {
+        if (!searchQuery) {
           return true;
         }
+
         return (
-          instructor.name.toLowerCase().includes(query) ||
-          instructor.email.toLowerCase().includes(query)
+          instructor.name.toLowerCase().includes(searchQuery) ||
+          instructor.email.toLowerCase().includes(searchQuery)
         );
       });
 
@@ -999,7 +1004,7 @@ export default function App() {
               <input
                 type="text"
                 value={instructorsSearch}
-                onChange={(event) => setInstructorsSearch(event.target.value)}
+                onChange={handleInstructorsSearchChange}
                 placeholder="Search by name or email..."
                 className="w-full sm:w-80 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
