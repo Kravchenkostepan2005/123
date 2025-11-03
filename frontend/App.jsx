@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import ActionsDemo from './actions-demo.jsx';
 
 function TwoColumnForm({ showFormSuccess, formData, onFormChange, onFormSave, onFormReset }) {
@@ -177,6 +177,7 @@ export default function App() {
   ]);
 
   const [instructorsSearch, setInstructorsSearch] = useState('');
+  const instructorsSearchInputRef = useRef(null);
 
   const [termsData, setTermsData] = useState([
     { id: 1, name: 'Academic Policy', version: '1.0', status: 'active' },
@@ -367,6 +368,15 @@ export default function App() {
     const nextValue = event.target.value ?? '';
     setInstructorsSearch(nextValue);
   };
+  useEffect(() => {
+    if (
+      guarantorSection === 'instructors' &&
+      instructorsSearchInputRef.current &&
+      document.activeElement !== instructorsSearchInputRef.current
+    ) {
+      instructorsSearchInputRef.current.focus({ preventScroll: true });
+    }
+  }, [guarantorSection, instructorsSearch]);
 
   const handleDeleteTerm = (id) => {
     setTermsData((prev) => prev.filter((term) => term.id !== id));
@@ -996,75 +1006,76 @@ export default function App() {
         );
       });
 
-      return (
-        <div className="space-y-6">
-          <h2 className="text-xl font-semibold text-gray-900">Instructors</h2>
+        return (
+          <div className="space-y-6">
+            <h2 className="text-xl font-semibold text-gray-900">Instructors</h2>
 
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <div className="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center mb-4">
-              <input
-                type="text"
-                value={instructorsSearch}
-                onChange={handleInstructorsSearchChange}
-                placeholder="Search by name or email..."
-                className="w-full sm:w-80 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-              <button
-                onClick={handleAddInstructor}
-                className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
-              >
-                Add Lecturer
-              </button>
-            </div>
+            <div className="bg-white rounded-lg border border-gray-200 p-6">
+              <div className="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center mb-4">
+                <input
+                  ref={instructorsSearchInputRef}
+                  type="text"
+                  value={instructorsSearch}
+                  onChange={handleInstructorsSearchChange}
+                  placeholder="Search by name or email..."
+                  className="w-full sm:w-80 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <button
+                  onClick={handleAddInstructor}
+                  className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
+                >
+                  Add Lecturer
+                </button>
+              </div>
 
-            <div className="overflow-x-auto">
-              <table className="min-w-full text-sm">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wide">Name</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wide">Email</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wide">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredInstructors.map((instructor) => (
-                    <tr key={instructor.id} className="border-b border-gray-200 hover:bg-gray-50">
-                      <td className="px-6 py-4 font-medium text-gray-900">{instructor.name}</td>
-                      <td className="px-6 py-4 text-gray-600">{instructor.email}</td>
-                      <td className="px-6 py-4">
-                        <div className="flex items-center gap-2">
-                          <span
-                            className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                              instructor.status === 'active'
-                                ? 'bg-emerald-100 text-emerald-700'
-                                : 'bg-gray-200 text-gray-700'
-                            }`}
-                          >
-                            {instructor.status === 'active' ? 'Active' : 'Inactive'}
-                          </span>
-                          <button
-                            onClick={() => toggleInstructorStatus(instructor.id)}
-                            className="px-3 py-1 rounded text-xs font-medium text-blue-600 border border-blue-200 hover:bg-blue-50"
-                          >
-                            {instructor.status === 'active' ? 'Set Inactive' : 'Set Active'}
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                  {filteredInstructors.length === 0 && (
+              <div className="overflow-x-auto">
+                <table className="min-w-full text-sm">
+                  <thead className="bg-gray-50">
                     <tr>
-                      <td colSpan={3} className="px-6 py-8 text-center text-gray-500">
-                        No instructors found
-                      </td>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wide">Name</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wide">Email</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wide">Actions</th>
                     </tr>
-                  )}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {filteredInstructors.map((instructor) => (
+                      <tr key={instructor.id} className="border-b border-gray-200 hover:bg-gray-50">
+                        <td className="px-6 py-4 font-medium text-gray-900">{instructor.name}</td>
+                        <td className="px-6 py-4 text-gray-600">{instructor.email}</td>
+                        <td className="px-6 py-4">
+                          <div className="flex items-center gap-2">
+                            <span
+                              className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
+                                instructor.status === 'active'
+                                  ? 'bg-emerald-100 text-emerald-700'
+                                  : 'bg-gray-200 text-gray-700'
+                              }`}
+                            >
+                              {instructor.status === 'active' ? 'Active' : 'Inactive'}
+                            </span>
+                            <button
+                              onClick={() => toggleInstructorStatus(instructor.id)}
+                              className="px-3 py-1 rounded text-xs font-medium text-blue-600 border border-blue-200 hover:bg-blue-50"
+                            >
+                              {instructor.status === 'active' ? 'Set Inactive' : 'Set Active'}
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                    {filteredInstructors.length === 0 && (
+                      <tr>
+                        <td colSpan={3} className="px-6 py-8 text-center text-gray-500">
+                          No instructors found
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
-        </div>
-      );
+        );
     };
 
     const renderTermsManagerSection = () => (
