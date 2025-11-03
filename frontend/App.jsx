@@ -466,7 +466,7 @@ export default function App() {
     }
   };
 
-  const Courses = () => (
+  const renderCourses = () => (
     <div className="p-6">
       <h1 className="text-2xl font-bold text-gray-900 mb-6">Courses</h1>
       <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
@@ -517,7 +517,7 @@ export default function App() {
     </div>
   );
 
-  const Desktop1 = () => (
+  const renderDesktop1 = () => (
     <div className="p-6">
       <h1 className="text-2xl font-bold text-gray-900 mb-8">Desktop - 1</h1>
       <h2 className="text-xl font-semibold text-gray-800 mb-4">WG32</h2>
@@ -612,7 +612,7 @@ export default function App() {
     </div>
   );
 
-  const AppShell = () => (
+  const renderAppShell = () => (
     <div className="p-6">
       <div className="grid grid-cols-12 gap-4">
         <div className="col-span-12">
@@ -647,7 +647,7 @@ export default function App() {
     </div>
   );
 
-  const DataTable = () => (
+  const renderDataTable = () => (
     <div className="p-6">
       <div className="max-w-6xl mx-auto">
         <div className="mb-6">
@@ -749,8 +749,8 @@ export default function App() {
     { id: 'newTermDialog', label: 'New Term Dialog' },
   ];
 
-  const Guarantor = () => {
-    const GuarantorNavigation = () => (
+  const renderGuarantor = () => {
+    const renderGuarantorNavigation = () => (
       <div className="bg-white rounded-lg border border-gray-200 p-4 mb-6">
         <div className="flex gap-2 flex-wrap">
           {guarantorNavItems.map((item) => (
@@ -770,7 +770,7 @@ export default function App() {
       </div>
     );
 
-    const MyCoursesSection = () => {
+    const renderMyCoursesSection = () => {
       const statusSummary = courses.reduce(
         (acc, course) => {
           const key = course.status;
@@ -838,7 +838,7 @@ export default function App() {
       );
     };
 
-    const CourseEditorSection = () => (
+    const renderCourseEditorSection = () => (
       <div className="space-y-6">
         <h2 className="text-xl font-semibold text-gray-900">Course Editor</h2>
 
@@ -983,7 +983,7 @@ export default function App() {
       </div>
     );
 
-    const InstructorsSection = () => {
+    const renderInstructorsSection = () => {
       const searchQuery = instructorsSearch.toLowerCase();
       const filteredInstructors = instructorsData.filter((instructor) => {
         if (!searchQuery) {
@@ -1067,7 +1067,7 @@ export default function App() {
       );
     };
 
-    const TermsManagerSection = () => (
+    const renderTermsManagerSection = () => (
       <div className="space-y-6">
         <h2 className="text-xl font-semibold text-gray-900">Terms Manager</h2>
 
@@ -1132,7 +1132,7 @@ export default function App() {
       </div>
     );
 
-    const AdminApprovalsSection = () => (
+    const renderAdminApprovalsSection = () => (
       <div className="space-y-6">
         <h2 className="text-xl font-semibold text-gray-900">Admin Approvals</h2>
         <p className="text-gray-600">Pending terms awaiting approval</p>
@@ -1188,7 +1188,7 @@ export default function App() {
       </div>
     );
 
-    const EditProfileSection = () => (
+    const renderEditProfileSection = () => (
       <div className="space-y-6">
         <h2 className="text-xl font-semibold text-gray-900">Edit Profile</h2>
 
@@ -1270,7 +1270,7 @@ export default function App() {
       </div>
     );
 
-    const NewTermDialogSection = () => (
+    const renderNewTermDialogSection = () => (
       <div className="space-y-6">
         <h2 className="text-xl font-semibold text-gray-900">New Term Dialog</h2>
         <p className="text-gray-600">
@@ -1362,7 +1362,7 @@ export default function App() {
       <div className="p-6">
         <h1 className="text-2xl font-bold text-gray-900 mb-6">Guarantor Dashboard</h1>
 
-        <GuarantorNavigation />
+        {renderGuarantorNavigation()}
 
         {guarantorSection === 'dashboard' && (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -1445,18 +1445,18 @@ export default function App() {
           </div>
         )}
 
-        {guarantorSection === 'myCourses' && <MyCoursesSection />}
-        {guarantorSection === 'courseEditor' && <CourseEditorSection />}
-        {guarantorSection === 'instructors' && <InstructorsSection />}
-        {guarantorSection === 'termsManager' && <TermsManagerSection />}
-        {guarantorSection === 'adminApprovals' && <AdminApprovalsSection />}
-        {guarantorSection === 'editProfile' && <EditProfileSection />}
-        {guarantorSection === 'newTermDialog' && <NewTermDialogSection />}
+        {guarantorSection === 'myCourses' && renderMyCoursesSection()}
+        {guarantorSection === 'courseEditor' && renderCourseEditorSection()}
+        {guarantorSection === 'instructors' && renderInstructorsSection()}
+        {guarantorSection === 'termsManager' && renderTermsManagerSection()}
+        {guarantorSection === 'adminApprovals' && renderAdminApprovalsSection()}
+        {guarantorSection === 'editProfile' && renderEditProfileSection()}
+        {guarantorSection === 'newTermDialog' && renderNewTermDialogSection()}
       </div>
     );
   };
 
-  const ActionsDemoWrapper = () => (
+  const renderActionsDemo = () => (
     <div className="p-6">
       <div className="ml-8">
         <ActionsDemo
@@ -1484,9 +1484,9 @@ export default function App() {
   const renderContent = () => {
     switch (activeTab) {
       case 'Desktop1':
-        return <Desktop1 />;
+        return renderDesktop1();
       case 'AppShell':
-        return <AppShell />;
+        return renderAppShell();
       case 'TwoColumnForm':
         return (
           <TwoColumnForm
@@ -1498,15 +1498,15 @@ export default function App() {
           />
         );
       case 'DataTable':
-        return <DataTable />;
+        return renderDataTable();
       case 'Guarantor':
-        return <Guarantor />;
+        return renderGuarantor();
       case 'ActionsDemo':
-        return <ActionsDemoWrapper />;
+        return renderActionsDemo();
       case 'Courses':
-        return <Courses />;
+        return renderCourses();
       default:
-        return <Desktop1 />;
+        return renderDesktop1();
     }
   };
 
