@@ -169,12 +169,14 @@ export default function App() {
   });
 
   const [instructorsData, setInstructorsData] = useState([
-    { id: 1, type: 'Instruct', status: 'active' },
-    { id: 2, type: 'Training', status: 'active' },
-    { id: 3, type: 'Writing', status: 'inactive' },
-    { id: 4, type: 'Speech', status: 'active' },
-    { id: 5, type: 'Dating', status: 'inactive' },
+    { id: 1, name: 'Avery Johnson', email: 'avery.johnson@example.edu', status: 'active' },
+    { id: 2, name: 'Brooklyn Smith', email: 'brooklyn.smith@example.edu', status: 'active' },
+    { id: 3, name: 'Cameron Diaz', email: 'cameron.diaz@example.edu', status: 'inactive' },
+    { id: 4, name: 'Devon Lee', email: 'devon.lee@example.edu', status: 'active' },
+    { id: 5, name: 'Emerson Clark', email: 'emerson.clark@example.edu', status: 'inactive' },
   ]);
+
+  const [instructorsSearch, setInstructorsSearch] = useState('');
 
   const [termsData, setTermsData] = useState([
     { id: 1, name: 'Academic Policy', version: '1.0', status: 'active' },
@@ -342,6 +344,19 @@ export default function App() {
           : instructor
       )
     );
+  };
+
+  const handleAddInstructor = () => {
+    setInstructorsData((prev) => {
+      const nextIndex = prev.length + 1;
+      const newInstructor = {
+        id: Date.now(),
+        name: `New Lecturer #${nextIndex}`,
+        email: `lecturer${nextIndex}@example.edu`,
+        status: 'active',
+      };
+      return [newInstructor, ...prev];
+    });
   };
 
   const handleTermStatusChange = (id, newStatus) => {
@@ -963,35 +978,88 @@ export default function App() {
       </div>
     );
 
-    const InstructorsSection = () => (
-      <div className="space-y-6">
-        <h2 className="text-xl font-semibold text-gray-900">Instructors</h2>
+    const InstructorsSection = () => {
+      const filteredInstructors = instructorsData.filter((instructor) => {
+        const query = instructorsSearch.trim().toLowerCase();
+        if (!query) {
+          return true;
+        }
+        return (
+          instructor.name.toLowerCase().includes(query) ||
+          instructor.email.toLowerCase().includes(query)
+        );
+      });
 
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
-          <h3 className="text-lg font-medium text-gray-700 mb-4">Code</h3>
-          <div className="space-y-2">
-            {instructorsData.map((instructor) => (
-              <div
-                key={instructor.id}
-                className="flex items-center justify-between p-3 border border-gray-200 rounded-lg"
+      return (
+        <div className="space-y-6">
+          <h2 className="text-xl font-semibold text-gray-900">Instructors</h2>
+
+          <div className="bg-white rounded-lg border border-gray-200 p-6">
+            <div className="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center mb-4">
+              <input
+                type="text"
+                value={instructorsSearch}
+                onChange={(event) => setInstructorsSearch(event.target.value)}
+                placeholder="Search by name or email..."
+                className="w-full sm:w-80 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <button
+                onClick={handleAddInstructor}
+                className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
               >
-                <span className="text-gray-700">{instructor.type}</span>
-                <button
-                  onClick={() => toggleInstructorStatus(instructor.id)}
-                  className={`px-3 py-1 rounded text-sm ${
-                    instructor.status === 'active'
-                      ? 'bg-green-100 text-green-800'
-                      : 'bg-gray-100 text-gray-800'
-                  }`}
-                >
-                  {instructor.status === 'active' ? 'Active' : 'Inactive'}
-                </button>
-              </div>
-            ))}
+                Add Lecturer
+              </button>
+            </div>
+
+            <div className="overflow-x-auto">
+              <table className="min-w-full text-sm">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wide">Name</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wide">Email</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wide">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredInstructors.map((instructor) => (
+                    <tr key={instructor.id} className="border-b border-gray-200 hover:bg-gray-50">
+                      <td className="px-6 py-4 font-medium text-gray-900">{instructor.name}</td>
+                      <td className="px-6 py-4 text-gray-600">{instructor.email}</td>
+                      <td className="px-6 py-4">
+                        <div className="flex items-center gap-2">
+                          <span
+                            className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
+                              instructor.status === 'active'
+                                ? 'bg-emerald-100 text-emerald-700'
+                                : 'bg-gray-200 text-gray-700'
+                            }`}
+                          >
+                            {instructor.status === 'active' ? 'Active' : 'Inactive'}
+                          </span>
+                          <button
+                            onClick={() => toggleInstructorStatus(instructor.id)}
+                            className="px-3 py-1 rounded text-xs font-medium text-blue-600 border border-blue-200 hover:bg-blue-50"
+                          >
+                            {instructor.status === 'active' ? 'Set Inactive' : 'Set Active'}
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                  {filteredInstructors.length === 0 && (
+                    <tr>
+                      <td colSpan={3} className="px-6 py-8 text-center text-gray-500">
+                        No instructors found
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
-      </div>
-    );
+      );
+    };
 
     const TermsManagerSection = () => (
       <div className="space-y-6">
