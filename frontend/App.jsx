@@ -364,8 +364,8 @@ export default function App() {
   };
 
   const handleInstructorsSearchChange = (event) => {
-    const { value } = event.currentTarget;
-    setInstructorsSearch(value);
+    const nextValue = event.target.value ?? '';
+    setInstructorsSearch(nextValue);
   };
 
   const handleDeleteTerm = (id) => {
