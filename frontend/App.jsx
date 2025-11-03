@@ -717,100 +717,35 @@ export default function App() {
     </div>
   );
 
+  const guarantorNavItems = [
+    { id: 'dashboard', label: 'Dashboard' },
+    { id: 'approvals', label: 'Approvals' },
+    { id: 'myCourses', label: 'My Courses' },
+    { id: 'courseEditor', label: 'Course Editor' },
+    { id: 'instructors', label: 'Instructors' },
+    { id: 'termsManager', label: 'Terms Manager' },
+    { id: 'adminApprovals', label: `Admin Approvals (${pendingTerms.length})` },
+    { id: 'editProfile', label: 'Edit Profile' },
+    { id: 'newTermDialog', label: 'New Term Dialog' },
+  ];
+
   const Guarantor = () => {
     const GuarantorNavigation = () => (
       <div className="bg-white rounded-lg border border-gray-200 p-4 mb-6">
         <div className="flex gap-2 flex-wrap">
-          <button
-            onClick={() => setGuarantorSection('dashboard')}
-            className={`px-4 py-2 rounded-lg transition-colors text-sm ${
-              guarantorSection === 'dashboard'
-                ? 'bg-blue-600 text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            }`}
-          >
-            Dashboard
-          </button>
-          <button
-            onClick={() => setGuarantorSection('approvals')}
-            className={`px-4 py-2 rounded-lg transition-colors text-sm ${
-              guarantorSection === 'approvals'
-                ? 'bg-blue-600 text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            }`}
-          >
-            Approvals
-          </button>
-          <button
-            onClick={() => setGuarantorSection('myCourses')}
-            className={`px-4 py-2 rounded-lg transition-colors text-sm ${
-              guarantorSection === 'myCourses'
-                ? 'bg-blue-600 text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            }`}
-          >
-            My Courses
-          </button>
-          <button
-            onClick={() => setGuarantorSection('courseEditor')}
-            className={`px-4 py-2 rounded-lg transition-colors text-sm ${
-              guarantorSection === 'courseEditor'
-                ? 'bg-blue-600 text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            }`}
-          >
-            Course Editor
-          </button>
-          <button
-            onClick={() => setGuarantorSection('instructors')}
-            className={`px-4 py-2 rounded-lg transition-colors text-sm ${
-              guarantorSection === 'instructors'
-                ? 'bg-blue-600 text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            }`}
-          >
-            Instructors
-          </button>
-          <button
-            onClick={() => setGuarantorSection('termsManager')}
-            className={`px-4 py-2 rounded-lg transition-colors text-sm ${
-              guarantorSection === 'termsManager'
-                ? 'bg-blue-600 text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            }`}
-          >
-            Terms Manager
-          </button>
-          <button
-            onClick={() => setGuarantorSection('adminApprovals')}
-            className={`px-4 py-2 rounded-lg transition-colors text-sm ${
-              guarantorSection === 'adminApprovals'
-                ? 'bg-blue-600 text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            }`}
-          >
-            Admin Approvals ({pendingTerms.length})
-          </button>
-          <button
-            onClick={() => setGuarantorSection('editProfile')}
-            className={`px-4 py-2 rounded-lg transition-colors text-sm ${
-              guarantorSection === 'editProfile'
-                ? 'bg-blue-600 text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            }`}
-          >
-            Edit Profile
-          </button>
-          <button
-            onClick={() => setGuarantorSection('newTermDialog')}
-            className={`px-4 py-2 rounded-lg transition-colors text-sm ${
-              guarantorSection === 'newTermDialog'
-                ? 'bg-blue-600 text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            }`}
-          >
-            New Term Dialog
-          </button>
+          {guarantorNavItems.map((item) => (
+            <button
+              key={item.id}
+              onClick={() => setGuarantorSection(item.id)}
+              className={`px-4 py-2 rounded-lg transition-colors text-sm ${
+                guarantorSection === item.id
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              {item.label}
+            </button>
+          ))}
         </div>
       </div>
     );
