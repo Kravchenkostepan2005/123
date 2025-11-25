@@ -311,6 +311,15 @@ A variety of mature and freely available GP implementations support both approac
 
 \par This workflow highlights how CGP accommodates both crossover-heavy and mutation-centric search schemes while keeping the encoding simple enough to enforce structural validity at every step. The discussion also underscores the close relationship between genotype constraints, reuse mechanisms, and the computational savings targeted in the remainder of the thesis.
 
+\par Figure \ref{fig:fitness-approximation-flow} illustrates the workflow dashboard used to monitor CGP experiments and the adaptive fitness approximation stages that follow each evolutionary update. The screenshot highlights how surrogate-based estimates and full evaluations are interleaved when the stability heuristics indicate that approximation error remains within tolerance.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.6\textwidth]{Screenshot 2025-11-25 at 10.01.19.png}
+\caption{Workflow view combining CGP evolution and adaptive fitness approximation}
+\label{fig:fitness-approximation-flow}
+\end{figure}
+
 \section{Fitness Evaluation}
 \label{sec:fitness-evaluation}
 The importance of the fitness function for the evolutionary process and its computational cost.
