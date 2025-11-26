@@ -322,7 +322,7 @@ A variety of mature and freely available GP implementations support both approac
 
 \section{Fitness Evaluation}
 \label{sec:fitness-evaluation}
-The importance of the fitness function for the evolutionary process and its computational cost.
+\par In GP the fitness function acts as the environment that rewards or penalizes whole lineages of candidate programs. Carr emphasizes that this scoring rule is the sole interface between the experimenter’s intent and the stochastic search, so any ambiguity or loophole is inevitably exploited by the evolving population \cite{carr2014}. Designing the metric therefore requires more care than a binary pass/fail test: the function must grade intermediate behaviours so that partially correct individuals can be distinguished from genuinely optimal ones and the search receives meaningful gradients. This idea of awarding “partial credit” steers selection pressure toward the exact behaviours we want and prevents premature convergence on degenerate tricks. Because the fitness evaluator is the only component that directly observes program behaviour, it ultimately determines whether an evolutionary run discovers high-quality solutions or stalls entirely, and—due to repeated execution on every individual—it frequently dominates the overall computational budget.
 
 \section{Problem of High Computational Demand}
 \label{sec:high-computational-demand}
@@ -413,6 +413,11 @@ Facility for Rare Isotope Beams, Michigan State University, 2024.
 Langdon, W. B., Poli, R., McPhee, N. F., Koza, J. R.
 \emph{Genetic Programming: An Introduction and Tutorial, with a Survey of Techniques and Applications}.
 2008.
+
+\bibitem{carr2014}
+Carr, J.
+\emph{An Introduction to Genetic Algorithms}.
+Whitman College, 2014. Available at: \url{https://www.whitman.edu/Documents/Academics/Mathematics/2014/carrjk.pdf}.
 
 \end{thebibliography}
 
