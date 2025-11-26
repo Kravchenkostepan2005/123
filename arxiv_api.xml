@@ -1,0 +1,143 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:arxiv="http://arxiv.org/schemas/atom" xmlns="http://www.w3.org/2005/Atom">
+  <id>https://arxiv.org/api/O3HMTl4LftkaVevjMM+5D1EXLWA</id>
+  <title>arXiv Query: search_query=all:"fitness approximation"&amp;id_list=&amp;start=0&amp;max_results=5</title>
+  <updated>2025-11-26T15:30:40Z</updated>
+  <link href="https://arxiv.org/api/query?search_query=all:%22fitness+approximation%22&amp;start=0&amp;max_results=5&amp;id_list=" type="application/atom+xml"/>
+  <opensearch:itemsPerPage>5</opensearch:itemsPerPage>
+  <opensearch:totalResults>8464</opensearch:totalResults>
+  <opensearch:startIndex>0</opensearch:startIndex>
+  <entry>
+    <id>http://arxiv.org/abs/1505.01751v4</id>
+    <title>An individual-based model for the Lenski experiment, and the deceleration of the relative fitness</title>
+    <updated>2016-02-02T15:47:43Z</updated>
+    <link href="https://arxiv.org/abs/1505.01751v4" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/1505.01751v4" rel="related" type="application/pdf" title="pdf"/>
+    <summary>The Lenski experiment investigates the long-term evolution of bacterial populations. Its design allows the direct comparison of the reproductive fitness of an evolved strain with its founder ancestor. It was observed by Wiser et al. (2013) that the relative fitness over time increases sublinearly, a behaviour which is commonly attributed to effects like clonal interference or epistasis. In this paper we present an individual-based probabilistic model that captures essential features of the design of the Lenski experiment. We assume that each beneficial mutation increases the individual reproduction rate by a fixed amount, which corresponds to the absence of epistasis in the continuous-time (intraday) part of the model, but leads to an epistatic effect in the discrete-time (interday) part of the model. Using an approximation by near-critical Galton-Watson processes, we prove that under some assumptions on the model parameters which exclude clonal interference, the relative fitness process converges, after suitable rescaling, in the large population limit to a power law function.</summary>
+    <category term="math.PR" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="q-bio.PE" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2015-05-07T15:45:32Z</published>
+    <arxiv:comment>minor changes, additional references, some comments on the notion of relative fitness and on the modelling assumptions added</arxiv:comment>
+    <arxiv:primary_category term="math.PR"/>
+    <author>
+      <name>Adrián González Casanova</name>
+    </author>
+    <author>
+      <name>Noemi Kurt</name>
+    </author>
+    <author>
+      <name>Anton Wakolbinger</name>
+    </author>
+    <author>
+      <name>Linglong Yuan</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2309.03318v2</id>
+    <title>Fitness Approximation through Machine Learning</title>
+    <updated>2024-05-21T12:32:08Z</updated>
+    <link href="https://arxiv.org/abs/2309.03318v2" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2309.03318v2" rel="related" type="application/pdf" title="pdf"/>
+    <summary>We present a novel approach to performing fitness approximation in genetic algorithms (GAs) using machine-learning (ML) models, through dynamic adaptation to the evolutionary state. Maintaining a dataset of sampled individuals along with their actual fitness scores, we continually update a fitness-approximation ML model throughout an evolutionary run. We compare different methods for: 1) switching between actual and approximate fitness, 2) sampling the population, and 3) weighting the samples. Experimental findings demonstrate significant improvement in evolutionary runtimes, with fitness scores that are either identical or slightly lower than that of the fully run GA -- depending on the ratio of approximate-to-actual-fitness computation. Although we focus on evolutionary agents in Gymnasium (game) simulators -- where fitness computation is costly -- our approach is generic and can be easily applied to many different domains.</summary>
+    <category term="cs.NE" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.LG" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2023-09-06T18:58:21Z</published>
+    <arxiv:comment>11 pages, 5 tables, 2 figures. Submitted to IEEE Transactions on Evolutionary Computation</arxiv:comment>
+    <arxiv:primary_category term="cs.NE"/>
+    <author>
+      <name>Itai Tzruia</name>
+    </author>
+    <author>
+      <name>Tomer Halperin</name>
+    </author>
+    <author>
+      <name>Moshe Sipper</name>
+    </author>
+    <author>
+      <name>Achiya Elyasaf</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/1811.05685v1</id>
+    <title>Layout Design for Intelligent Warehouse by Evolution with Fitness Approximation</title>
+    <updated>2018-11-14T08:37:01Z</updated>
+    <link href="https://arxiv.org/abs/1811.05685v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/1811.05685v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>With the rapid growth of the express industry, intelligent warehouses that employ autonomous robots for carrying parcels have been widely used to handle the vast express volume. For such warehouses, the warehouse layout design plays a key role in improving the transportation efficiency. However, this work is still done by human experts, which is expensive and leads to suboptimal results. In this paper, we aim to automate the warehouse layout designing process. We propose a two-layer evolutionary algorithm to efficiently explore the warehouse layout space, where an auxiliary objective fitness approximation model is introduced to predict the outcome of the designed warehouse layout and a two-layer population structure is proposed to incorporate the approximation model into the ordinary evolution framework. Empirical experiments show that our method can efficiently design effective warehouse layouts that outperform both heuristic-designed and vanilla evolution-designed warehouse layouts.</summary>
+    <category term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2018-11-14T08:37:01Z</published>
+    <arxiv:primary_category term="cs.AI"/>
+    <author>
+      <name>Haifeng Zhang</name>
+    </author>
+    <author>
+      <name>Zilong Guo</name>
+    </author>
+    <author>
+      <name>Han Cai</name>
+    </author>
+    <author>
+      <name>Chris Wang</name>
+    </author>
+    <author>
+      <name>Weinan Zhang</name>
+    </author>
+    <author>
+      <name>Yong Yu</name>
+    </author>
+    <author>
+      <name>Wenxin Li</name>
+    </author>
+    <author>
+      <name>Jun Wang</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/1601.04096v1</id>
+    <title>Goodness-of-fit statistics for approximate Bayesian computation</title>
+    <updated>2016-01-15T23:01:42Z</updated>
+    <link href="https://arxiv.org/abs/1601.04096v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/1601.04096v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Approximate Bayesian computation is a statistical framework that uses numerical simulations to calibrate and compare models. Instead of computing likelihood functions, Approximate Bayesian computation relies on numerical simulations, which makes it applicable to complex models in ecology and evolution. As usual for statistical modeling, evaluating goodness-of-fit is a fundamental step for Approximate Bayesian Computation. Here, we introduce a goodness-of-fit approach based on hypothesis-testing. We introduce two test statistics based on the mean distance between numerical summaries of the data and simulated ones. One test statistic relies on summaries simulated with the prior predictive distribution whereas the other one relies on simulations from the posterior predictive distribution. For different coalescent models, we find that the statistics are well calibrated, meaning that the type I error can be controlled. However, the statistical power of the two statistics is extremely variable across models ranging from 20% to 100%. The difference of power between the two statistics is negligible in models of demographic inference but substantial in an additional and purely statistical example. When analyzing resequencing data to evaluate models of human demography, the two statistics confirm that an out-of-Africa bottleneck cannot be rejected for Asiatic and European data. We also consider two speciation models in the context of a butterfly species complex. One goodness-of-fit statistic indicates a poor fit for both models, and the numerical summaries causing the poor fit were identified using posterior predictive checks. Statistical tests for goodness-of-fit should foster evaluation of model fit in Approximate Bayesian Computation. The test statistic based on simulations from the prior predictive distribution is implemented in the gfit function of the R abc package.</summary>
+    <category term="stat.ME" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2016-01-15T23:01:42Z</published>
+    <arxiv:primary_category term="stat.ME"/>
+    <author>
+      <name>Louisiane Lemaire</name>
+    </author>
+    <author>
+      <name>Flora Jay</name>
+    </author>
+    <author>
+      <name>I-Hung Lee</name>
+    </author>
+    <author>
+      <name>Katalin Csilléry</name>
+    </author>
+    <author>
+      <name>Michael G. B. Blum</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/1810.11532v1</id>
+    <title>A Theoretical Framework of Approximation Error Analysis of Evolutionary Algorithms</title>
+    <updated>2018-10-26T21:20:25Z</updated>
+    <link href="https://arxiv.org/abs/1810.11532v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/1810.11532v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>In the empirical study of evolutionary algorithms, the solution quality is evaluated by either the fitness value or approximation error. The latter measures the fitness difference between an approximation solution and the optimal solution. Since the approximation error analysis is more convenient than the direct estimation of the fitness value, this paper focuses on approximation error analysis. However, it is straightforward to extend all related results from the approximation error to the fitness value. Although the evaluation of solution quality plays an essential role in practice, few rigorous analyses have been conducted on this topic. This paper aims at establishing a novel theoretical framework of approximation error analysis of evolutionary algorithms for discrete optimization. This framework is divided into two parts. The first part is about exact expressions of the approximation error. Two methods, Jordan form and Schur's triangularization, are presented to obtain an exact expression. The second part is about upper bounds on approximation error. Two methods, convergence rate and auxiliary matrix iteration, are proposed to estimate the upper bound. The applicability of this framework is demonstrated through several examples.</summary>
+    <category term="cs.NE" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="math.OC" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2018-10-26T21:20:25Z</published>
+    <arxiv:primary_category term="cs.NE"/>
+    <author>
+      <name>Jun He</name>
+    </author>
+    <author>
+      <name>Yu Chen</name>
+    </author>
+    <author>
+      <name>Yuren Zhou</name>
+    </author>
+  </entry>
+</feed>

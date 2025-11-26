@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:arxiv="http://arxiv.org/schemas/atom" xmlns="http://www.w3.org/2005/Atom">
+  <id>https://arxiv.org/api/SxccYLwNmS3FOP9EAoIHDHe3FTE</id>
+  <title>arXiv Query: search_query=all:"fitness function"&amp;id_list=&amp;start=0&amp;max_results=3</title>
+  <updated>2025-11-26T18:23:21Z</updated>
+  <link href="https://arxiv.org/api/query?search_query=all:%22fitness+function%22&amp;start=0&amp;max_results=3&amp;id_list=" type="application/atom+xml"/>
+  <opensearch:itemsPerPage>3</opensearch:itemsPerPage>
+  <opensearch:totalResults>21399</opensearch:totalResults>
+  <opensearch:startIndex>0</opensearch:startIndex>
+  <entry>
+    <id>http://arxiv.org/abs/1402.3065v2</id>
+    <title>Adaptation in tunably rugged fitness landscapes: The Rough Mount Fuji Model</title>
+    <updated>2014-08-01T09:39:00Z</updated>
+    <link href="https://arxiv.org/abs/1402.3065v2" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/1402.3065v2" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Much of the current theory of adaptation is based on Gillespie's mutational landscape model (MLM), which assumes that the fitness values of genotypes linked by single mutational steps are independent random variables. On the other hand, a growing body of empirical evidence shows that real fitness landscapes, while possessing a considerable amount of ruggedness, are smoother than predicted by the MLM. In the present article we propose and analyse a simple fitness landscape model with tunable ruggedness based on the Rough Mount Fuji (RMF) model originally introduced by Aita et al. [Biopolymers 54:64-79 (2000)] in the context of protein evolution. We provide a comprehensive collection of results pertaining to the topographical structure of RMF landscapes, including explicit formulae for the expected number of local fitness maxima, the location of the global peak, and the fitness correlation function. The statistics of single and multiple adaptive steps on the RMF landscape are explored mainly through simulations, and the results are compared to the known behavior in the MLM model. Finally, we show that the RMF model can explain the large number of second-step mutations observed on a highly-fit first step backgound in a recent evolution experiment with a microvirid bacteriophage [Miller et al., Genetics 187:185-202 (2011)].</summary>
+    <category term="q-bio.PE" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cond-mat.dis-nn" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2014-02-13T08:55:02Z</published>
+    <arxiv:comment>43 pages, 12 figures; revised version with new results on the number of fitness maxima</arxiv:comment>
+    <arxiv:primary_category term="q-bio.PE"/>
+    <arxiv:journal_ref>Genetics 198: 699-721 (2014)</arxiv:journal_ref>
+    <author>
+      <name>Johannes Neidhart</name>
+    </author>
+    <author>
+      <name>Ivan G. Szendro</name>
+    </author>
+    <author>
+      <name>Joachim Krug</name>
+    </author>
+    <arxiv:doi>10.1534/genetics.114.167668</arxiv:doi>
+    <link rel="related" href="https://doi.org/10.1534/genetics.114.167668" title="doi"/>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/1505.01751v4</id>
+    <title>An individual-based model for the Lenski experiment, and the deceleration of the relative fitness</title>
+    <updated>2016-02-02T15:47:43Z</updated>
+    <link href="https://arxiv.org/abs/1505.01751v4" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/1505.01751v4" rel="related" type="application/pdf" title="pdf"/>
+    <summary>The Lenski experiment investigates the long-term evolution of bacterial populations. Its design allows the direct comparison of the reproductive fitness of an evolved strain with its founder ancestor. It was observed by Wiser et al. (2013) that the relative fitness over time increases sublinearly, a behaviour which is commonly attributed to effects like clonal interference or epistasis. In this paper we present an individual-based probabilistic model that captures essential features of the design of the Lenski experiment. We assume that each beneficial mutation increases the individual reproduction rate by a fixed amount, which corresponds to the absence of epistasis in the continuous-time (intraday) part of the model, but leads to an epistatic effect in the discrete-time (interday) part of the model. Using an approximation by near-critical Galton-Watson processes, we prove that under some assumptions on the model parameters which exclude clonal interference, the relative fitness process converges, after suitable rescaling, in the large population limit to a power law function.</summary>
+    <category term="math.PR" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="q-bio.PE" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2015-05-07T15:45:32Z</published>
+    <arxiv:comment>minor changes, additional references, some comments on the notion of relative fitness and on the modelling assumptions added</arxiv:comment>
+    <arxiv:primary_category term="math.PR"/>
+    <author>
+      <name>Adrián González Casanova</name>
+    </author>
+    <author>
+      <name>Noemi Kurt</name>
+    </author>
+    <author>
+      <name>Anton Wakolbinger</name>
+    </author>
+    <author>
+      <name>Linglong Yuan</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/1203.6286v5</id>
+    <title>On the Easiest and Hardest Fitness Functions</title>
+    <updated>2015-02-12T10:25:00Z</updated>
+    <link href="https://arxiv.org/abs/1203.6286v5" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/1203.6286v5" rel="related" type="application/pdf" title="pdf"/>
+    <summary>The hardness of fitness functions is an important research topic in the field of evolutionary computation. In theory, the study can help understanding the ability of evolutionary algorithms. In practice, the study may provide a guideline to the design of benchmarks. The aim of this paper is to answer the following research questions: Given a fitness function class, which functions are the easiest with respect to an evolutionary algorithm? Which are the hardest? How are these functions constructed? The paper provides theoretical answers to these questions. The easiest and hardest fitness functions are constructed for an elitist (1+1) evolutionary algorithm to maximise a class of fitness functions with the same optima. It is demonstrated that the unimodal functions are the easiest and deceptive functions are the hardest in terms of the time-fitness landscape. The paper also reveals that the easiest fitness function to one algorithm may become the hardest to another algorithm, and vice versa.</summary>
+    <category term="cs.NE" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2012-03-28T15:01:53Z</published>
+    <arxiv:primary_category term="cs.NE"/>
+    <arxiv:journal_ref>IEEE Transactions on evolutionary computation 19.2 (2015): 295-305</arxiv:journal_ref>
+    <author>
+      <name>Jun He</name>
+    </author>
+    <author>
+      <name>Tianshi Chen</name>
+    </author>
+    <author>
+      <name>Xin Yao</name>
+    </author>
+    <arxiv:doi>10.1109/TEVC.2014.2318025</arxiv:doi>
+    <link rel="related" href="https://doi.org/10.1109/TEVC.2014.2318025" title="doi"/>
+  </entry>
+</feed>
