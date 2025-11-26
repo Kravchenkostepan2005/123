@@ -322,7 +322,11 @@ A variety of mature and freely available GP implementations support both approac
 
 \section{Fitness Evaluation}
 \label{sec:fitness-evaluation}
-\par In GP the fitness function acts as the environment that rewards or penalizes whole lineages of candidate programs. Practitioner guides emphasize that this scoring rule is the sole interface between the experimenter’s intent and the stochastic search, so any ambiguity or loophole is inevitably exploited by the evolving population. Designing the metric therefore requires more care than a binary pass/fail test: the function must grade intermediate behaviours so that partially correct individuals can be distinguished from genuinely optimal ones and the search receives meaningful gradients. This idea of awarding “partial credit” steers selection pressure toward the exact behaviours we want and prevents premature convergence on degenerate tricks. Because the fitness evaluator is the only component that directly observes program behaviour, it ultimately determines whether an evolutionary run discovers high-quality solutions or stalls entirely, and—due to repeated execution on every individual—it frequently dominates the overall computational budget.
+\par In GP the fitness function acts as the environment that rewards or penalizes whole lineages of candidate programs. Practitioner guides emphasize that this scoring rule is the sole interface between the experimenter’s intent and the stochastic search, so any ambiguity or loophole is inevitably exploited by the evolving population. Designing the metric therefore requires more care than a binary pass/fail test: the function must grade intermediate behaviours so that partially correct individuals can be distinguished from genuinely optimal ones and the search receives meaningful gradients. This idea of awarding “partial credit” steers selection pressure toward the exact behaviours we want and prevents premature convergence on degenerate tricks. Because the fitness evaluator is the only component that directly observes program behaviour, it ultimately determines whether an evolutionary run discovers high-quality solutions or stalls entirely.
+
+\par Crafting such a metric involves balancing expressiveness and robustness. A smooth, well-scaled scoring curve communicates to the evolutionary operators which structural motifs should be preserved, while overly steep or discontinuous reward schedules tend to create deception and encourage brittle heuristics \cite{luke2016}. When the task combines several objectives—accuracy, complexity, interpretability, resource usage—the fitness definition must articulate priorities explicitly, typically via weighted sums, lexicographic ordering, or dominance-based ranking. Constraint handling introduces another layer: penalties need to be strong enough to enforce feasibility yet gentle enough to let partially infeasible innovations survive long enough to be repaired. Noise also influences design choices; for stochastic simulators it is often necessary to average the score over multiple trials or to maintain confidence intervals so that selection pressure is not driven by random fluctuations.
+
+\par Even when the qualitative behaviour is well captured, the numerical evaluation frequently dominates the runtime budget. Non-trivial individuals may require executing large expression trees, simulating physical dynamics, or processing substantial data batches, and this cost scales with both population size and generation count \cite{luke2016}. Common mitigation strategies include memoization of previously seen individuals, early stopping rules that abandon obviously poor candidates, hierarchical evaluation pipelines that start with coarse-grained checks, and the use of surrogate or reduced-order models to approximate the true score \cite{tong2019}. In distributed GP systems the evaluator is often offloaded to separate workers precisely because it is the most expensive component. Thus, both the semantic shape of the fitness landscape and the engineering cost of measuring it determine the practical success of a GP system.
 
 \section{Problem of High Computational Demand}
 \label{sec:high-computational-demand}
@@ -418,6 +422,15 @@ Langdon, W. B., Poli, R., McPhee, N. F., Koza, J. R.
 Carr, J.
 \emph{An Introduction to Genetic Algorithms}.
 Whitman College, 2014.
+
+\bibitem{luke2016}
+Luke, S.
+\emph{Essentials of Metaheuristics}. George Mason University, 2nd Edition, 2016.
+
+\bibitem{tong2019}
+Tong, H., Huang, C., Liu, J., Yao, X.
+\emph{Voronoi-based Efficient Surrogate-assisted Evolutionary Algorithm for Very Expensive Problems}.
+arXiv preprint arXiv:1901.05755, 2019.
 
 \end{thebibliography}
 
