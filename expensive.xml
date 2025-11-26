@@ -1,0 +1,137 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:arxiv="http://arxiv.org/schemas/atom" xmlns="http://www.w3.org/2005/Atom">
+  <id>https://arxiv.org/api/QOIlvbWXKIk5kP8nkdNlZsoSpq4</id>
+  <title>arXiv Query: search_query=all:"expensive fitness"&amp;id_list=&amp;start=0&amp;max_results=5</title>
+  <updated>2025-11-26T15:38:53Z</updated>
+  <link href="https://arxiv.org/api/query?search_query=all:%22expensive+fitness%22&amp;start=0&amp;max_results=5&amp;id_list=" type="application/atom+xml"/>
+  <opensearch:itemsPerPage>5</opensearch:itemsPerPage>
+  <opensearch:totalResults>940</opensearch:totalResults>
+  <opensearch:startIndex>0</opensearch:startIndex>
+  <entry>
+    <id>http://arxiv.org/abs/2404.06557v1</id>
+    <title>Temporal True and Surrogate Fitness Landscape Analysis for Expensive Bi-Objective Optimisation</title>
+    <updated>2024-04-09T18:20:16Z</updated>
+    <link href="https://arxiv.org/abs/2404.06557v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2404.06557v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Many real-world problems have expensive-to-compute fitness functions and are multi-objective in nature. Surrogate-assisted evolutionary algorithms are often used to tackle such problems. Despite this, literature about analysing the fitness landscapes induced by surrogate models is limited, and even non-existent for multi-objective problems. This study addresses this critical gap by comparing landscapes of the true fitness function with those of surrogate models for multi-objective functions. Moreover, it does so temporally by examining landscape features at different points in time during optimisation, in the vicinity of the population at that point in time. We consider the BBOB bi-objective benchmark functions in our experiments. The results of the fitness landscape analysis reveals significant differences between true and surrogate features at different time points during optimisation. Despite these differences, the true and surrogate landscape features still show high correlations between each other. Furthermore, this study identifies which landscape features are related to search and demonstrates that both surrogate and true landscape features are capable of predicting algorithm performance. These findings indicate that temporal analysis of the landscape features may help to facilitate the design of surrogate switching approaches to improve performance in multi-objective optimisation.</summary>
+    <category term="cs.NE" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2024-04-09T18:20:16Z</published>
+    <arxiv:primary_category term="cs.NE"/>
+    <author>
+      <name>C. J. Rodriguez</name>
+    </author>
+    <author>
+      <name>S. L. Thomson</name>
+    </author>
+    <author>
+      <name>T. Alderliesten</name>
+    </author>
+    <author>
+      <name>P. A. N. Bosman</name>
+    </author>
+    <arxiv:doi>10.1145/3638529.3654125</arxiv:doi>
+    <link rel="related" href="https://doi.org/10.1145/3638529.3654125" title="doi"/>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2412.09062v1</id>
+    <title>The expensive son hypothesis</title>
+    <updated>2024-12-12T08:44:36Z</updated>
+    <link href="https://arxiv.org/abs/2412.09062v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2412.09062v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>In its initial form, the expensive son hypothesis postulates that sons from male-biased sexually dimorphic species require more food during growth than daughters, which ultimately incur fitness costs for mothers predominantly producing and rearing sons. We first dissect the evolutionary framework in which the expensive son hypothesis is rooted, and we provide a critical reappraisal of its differences from other evolutionary theories proposed in the field of sex allocation. Then, we synthesize the current (and absence of) support for the costs of producing and rearing sons on maternal fitness components (future reproduction and survival). Regarding the consequences in terms of future reproduction, we highlight that species with pronounced sexual size dimorphism display a higher cost of sons than of daughters on subsequent reproductive performance, at least in mammals. However, in most studies, the relative fitness costs of producing and rearing sons and daughters can be due to sex-biased maternal allocation strategies rather than differences in energetic demands of offspring, which constitutes an alternative mechanism to the expensive son hypothesis stricto sensu. We observe that empirical studies investigating the differential costs of sons and daughters on maternal survival in non-human animals remain rare, especially for long-term survival. Indeed, most studies have investigated the influence of offspring sex (or litter sex ratio) at year $T$ on survival at year $T+1$, and they rarely provide a support to the expensive son hypothesis. On the contrary, in humans, most studies have focused on the relationship between proportion of sons and maternal lifespan, but these results are inconsistent. Our study highlights new avenues for future research that should provide a comprehensive view of the expensive son hypothesis, by notably disentangling the effects of offspring behaviour from the effect of sex-specific maternal allocation. Moreover, we emphasize that future studies should also embrace the mechanistic side of the expensive son hypothesis, largely neglected so far, by deciphering the physiological pathways linking son's production to maternal health and fitness.</summary>
+    <category term="q-bio.PE" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2024-12-12T08:44:36Z</published>
+    <arxiv:comment>Journal of Animal Ecology, 2024</arxiv:comment>
+    <arxiv:primary_category term="q-bio.PE"/>
+    <author>
+      <name>Lucas Invernizzi</name>
+      <arxiv:affiliation>LBBE</arxiv:affiliation>
+    </author>
+    <author>
+      <name>Jean-françois Lemaître</name>
+      <arxiv:affiliation>LBBE</arxiv:affiliation>
+    </author>
+    <author>
+      <name>Mathieu Douhard</name>
+      <arxiv:affiliation>LBBE</arxiv:affiliation>
+    </author>
+    <arxiv:doi>10.1111/1365-2656.14207</arxiv:doi>
+    <link rel="related" href="https://doi.org/10.1111/1365-2656.14207" title="doi"/>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2503.22224v2</id>
+    <title>Composite Indicator-Guided Infilling Sampling for Expensive Multi-Objective Optimization</title>
+    <updated>2025-06-13T03:46:52Z</updated>
+    <link href="https://arxiv.org/abs/2503.22224v2" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2503.22224v2" rel="related" type="application/pdf" title="pdf"/>
+    <summary>In expensive multi-objective optimization, where the evaluation budget is strictly limited, selecting promising candidate solutions for expensive fitness evaluations is critical for accelerating convergence and improving algorithmic performance. However, designing an optimization strategy that effectively balances convergence, diversity, and distribution remains a challenge. To tackle this issue, we propose a composite indicator-based evolutionary algorithm (CI-EMO) for expensive multi-objective optimization. In each generation of the optimization process, CI-EMO first employs NSGA-III to explore the solution space based on fitness values predicted by surrogate models, generating a candidate population. Subsequently, we design a novel composite performance indicator to guide the selection of candidates for real fitness evaluation. This indicator simultaneously considers convergence, diversity, and distribution to improve the efficiency of identifying promising candidate solutions, which significantly improves algorithm performance. The composite indicator-based candidate selection strategy is easy to achieve and computes efficiency. Component analysis experiments confirm the effectiveness of each element in the composite performance indicator. Comparative experiments on three benchmark test sets and real-world problems demonstrate that the proposed algorithm outperforms five state-of-the-art expensive multi-objective optimization algorithms.</summary>
+    <category term="cs.NE" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2025-03-28T08:15:58Z</published>
+    <arxiv:primary_category term="cs.NE"/>
+    <author>
+      <name>Huixiang Zhen</name>
+    </author>
+    <author>
+      <name>Xiaotong Li</name>
+    </author>
+    <author>
+      <name>Wenyin Gong</name>
+    </author>
+    <author>
+      <name>Xiangyun Hu</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2112.03413v1</id>
+    <title>Hybrid minimization algorithm for computationally expensive multi-dimensional fitting</title>
+    <updated>2021-12-06T23:09:49Z</updated>
+    <link href="https://arxiv.org/abs/2112.03413v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2112.03413v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Multi-dimensional optimization is widely used in virtually all areas of modern astrophysics. However, it is often too computationally expensive to evaluate a model on-the-fly. Typically, it is solved by pre-computing a grid of models for a predetermined set of positions in the parameter space and then interpolating. Here we present a hybrid minimization approach based on the local quadratic approximation of the $χ^2$ profile from a discrete set of models in a multidimensional parameter space. The main idea of our approach is to eliminate the interpolation of models from the process of finding the best-fitting solution. We present several examples of applications of our minimization technique to the analysis of stellar and extragalactic spectra.</summary>
+    <category term="astro-ph.IM" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2021-12-06T23:09:49Z</published>
+    <arxiv:comment>4 pages, 3 figures, ADASS-XXXI proceedings</arxiv:comment>
+    <arxiv:primary_category term="astro-ph.IM"/>
+    <author>
+      <name>Evgenii Rubtsov</name>
+    </author>
+    <author>
+      <name>Igor Chilingarian</name>
+    </author>
+    <author>
+      <name>Ivan Katkov</name>
+    </author>
+    <author>
+      <name>Kirill Grishin</name>
+    </author>
+    <author>
+      <name>Vladimir Goradzhanov</name>
+    </author>
+    <author>
+      <name>Sviatoslav Borisov</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/1901.05755v2</id>
+    <title>Voronoi-based Efficient Surrogate-assisted Evolutionary Algorithm for Very Expensive Problems</title>
+    <updated>2019-10-25T10:31:53Z</updated>
+    <link href="https://arxiv.org/abs/1901.05755v2" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/1901.05755v2" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Very expensive problems are very common in practical system that one fitness evaluation costs several hours or even days. Surrogate assisted evolutionary algorithms (SAEAs) have been widely used to solve this crucial problem in the past decades. However, most studied SAEAs focus on solving problems with a budget of at least ten times of the dimension of problems which is unacceptable in many very expensive real-world problems. In this paper, we employ Voronoi diagram to boost the performance of SAEAs and propose a novel framework named Voronoi-based efficient surrogate assisted evolutionary algorithm (VESAEA) for very expensive problems, in which the optimization budget, in terms of fitness evaluations, is only 5 times of the problem's dimension. In the proposed framework, the Voronoi diagram divides the whole search space into several subspace and then the local search is operated in some potentially better subspace. Additionally, in order to trade off the exploration and exploitation, the framework involves a global search stage developed by combining leave-one-out cross-validation and radial basis function surrogate model. A performance selector is designed to switch the search dynamically and automatically between the global and local search stages. The empirical results on a variety of benchmark problems demonstrate that the proposed framework significantly outperforms several state-of-art algorithms with extremely limited fitness evaluations. Besides, the efficacy of Voronoi-diagram is furtherly analyzed, and the results show its potential to optimize very expensive problems.</summary>
+    <category term="cs.NE" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2019-01-17T12:25:58Z</published>
+    <arxiv:primary_category term="cs.NE"/>
+    <author>
+      <name>Hao Tong</name>
+    </author>
+    <author>
+      <name>Changwu Huang</name>
+    </author>
+    <author>
+      <name>Jialin Liu</name>
+    </author>
+    <author>
+      <name>Xin Yao</name>
+    </author>
+  </entry>
+</feed>
