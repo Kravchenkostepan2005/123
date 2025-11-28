@@ -1,0 +1,144 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[slovak]{babel}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+\setlist{itemsep=2pt,topsep=4pt}
+
+\title{Dokumentácia k projektu IFJ/IAL}
+\author{xpocarj00 \\ xuherto00 \\ xchalo21 \\ xkravc03}
+\date{November 2025}
+
+\begin{document}
+
+\maketitle
+
+Dokumentácia k projektu z predmetu IFJ a IAL\\
+Implementácia prekladaču jazyku IFJ24\\
+Tím xpocarj00, xuherto00, xchalo21, xkravc03, varianta TRP-izp\\
+Každý člen prispel 25\% práce.
+
+\tableofcontents
+\newpage
+
+\section{Rozdelenie práce medzi členmi tímu}
+
+\subsection{xpocarj00 (25\%)}
+\begin{itemize}
+    \item Lexikálna analýza
+    \item Generátor kódu
+\end{itemize}
+
+\subsection{xuherto00 (25\%)}
+\begin{itemize}
+    \item Syntaktická analýza
+    \item Precedenčná logika
+    \item Tabuľka symbolov
+\end{itemize}
+
+\subsection{xchalo21 (25\%)}
+\begin{itemize}
+    \item Tabuľka symbolov
+    \item Generátor kódu
+\end{itemize}
+
+\subsection{xkravc03 (25\%)}
+\begin{itemize}
+    \item Testovacie súbory
+    \item Makefile
+    \item Dokumentácia
+    \item Pomocné štruktúry list a zásobník
+\end{itemize}
+
+\section{Spôsob riešenia jednotlivých častí projektu}
+
+\subsection{Lexikálna analýza}
+Lexikálna analýza je začiatok a základ prekladača. Nie je najzložitejšia, ale akékoľvek chyby rýchlo vedú k zlyhaniu celého programu, ktorý dostane nesprávne dáta. V našom projekte ju realizujú súbory \texttt{scanner.c} a \texttt{scanner.h}. Dizajn kódu je konečný automat, ktorý priebežne dopĺňame o nové požiadavky. Pomocou \texttt{getchar()} načítame symbol, ktorý spracujeme podľa aktuálneho stavu, pričom prepíname stavy a podľa potreby zapisujeme symbol do tokenu. K \texttt{scanner.c} pristupujeme funkciou \texttt{Token* getToken()}, ktorá vracia odkaz na novo vytvorený token obsahujúci typ a atribút reprezentovaný buď ukazovateľom na pole znakov (maximálna veľkosť \texttt{TOKEN\_STRING\_SIZE}), číslom typu \texttt{int}, \texttt{float}, alebo hodnotou typu \texttt{enum}.
+
+\subsection{Syntaktická analýza}
+Najdôležitejšia časť programu je syntaktická analýza implementovaná pomocou syntaktického analyzátora v súboroch \texttt{parser.c} a \texttt{parser.h}. Samotný analyzátor sa spúšťa funkciou \texttt{NProg}. Táto funkcia je riadená LL-gramatikou a metódou rekurzívneho zostupu cez LL-tabuľku. Postupne prechádza tokeny uložené v štruktúrovanom zozname \texttt{TList} definovanom v súboroch \texttt{list.c} a \texttt{list.h}. Prechádza vnorené funkcie zostavené pre každý neterminál, ktoré vracajú hodnotu \texttt{true}/\texttt{false} podľa korektnosti vstupného programu. Návratové hodnoty týchto funkcií sa prenášajú späť na funkciu \texttt{NProg}, ktorá vráti \texttt{true}, pokiaľ je vstup syntakticky správny, alebo \texttt{false}, ak nie je.
+
+\subsection{Spracovanie výrazov pomocou precedenčnej logiky}
+Precedenčnú logiku má na starosti funkcia \texttt{precProces} v súboroch \texttt{precedencna.c} a \texttt{precedencna.h}, ktorá je volaná pre každý token vo výraze. Na štruktúrovaný zásobník \texttt{StackNode} pridá token a môže vykonať zjednodušenie podľa pravidiel precedenčnej tabuľky. Následne pravidlá, ktoré použila, pridá na separátny zásobník, ktorý je potom priradený tokenu pred výrazom na jednoduchší prístup a manipuláciu. Počas celého procesu prebieha typová kontrola, aby sa zaistila správnosť výslednej hodnoty.
+
+\subsection{Generátor kódu}
+Generovanie kódu zabezpečuje funkcia \texttt{codeGen} v súboroch \texttt{interpret.c} a \texttt{interpret.h}. Funkcia prechádza zoznam tokenov na základe preddefinovanej logiky. Podľa prvého tokenu volá špecializované funkcie pre daný príkaz. Každá z týchto funkcií využíva pomocné funkcie na výpis, ktoré na \texttt{stdout} generujú trojadresné inštrukcie pre interpret \texttt{IFJcode24}. Popritom používa štruktúru \texttt{StackNode}, do ktorej ukladá poradie vnorenia príkazov, ako \texttt{while} alebo \texttt{if}. Pri práci s výrazmi sa využívajú pravidlá precedenčnej logiky uložené v položke \texttt{rules} predchádzajúceho tokenu, čím sa zabezpečí správny výpočet.
+
+\subsection{Tabuľka symbolov TRP-izp}
+Tabuľka symbolov je implementovaná ako štruktúrovaná hashovacia tabuľka \texttt{HashItem} podľa variantu zadania TRP-izp v súboroch \texttt{symtable.c} a \texttt{symtable.h}. Má na starosti spravovať užívateľom definované premenné a funkcie spolu s preddefinovanými funkciami \texttt{ifj.xxx}. Tabuľka používa "magic number" \texttt{hashNumber} 5381 na optimálne mapovanie položiek. Obsahuje informácie o type \texttt{const}/\texttt{var}, parametroch funkcií v štruktúre \texttt{symItems}, lokálnej skupine, úrovni vnorenia a o tom, či bola premenná inicializovaná alebo definovaná.
+
+\subsection{LL-gramatika}
+Aktuálne používaná LL-gramatika je uvedená nižšie. V tejto verzii dokumentu uvádzame len textový zápis pravidiel.
+
+\begin{enumerate}[label=\arabic*.]
+    \item $\langle NPROG \rangle \rightarrow \langle NPROLOG \rangle \langle NDEF \rangle EOF$
+    \item $\langle NPROLOG \rangle \rightarrow \text{const } ID = @inport(\text{\textquotedblleft}ifj24.zig\text{\textquotedblright});$
+    \item $\langle NDEF \rangle \rightarrow \text{pub fn } ID (\langle NDEFPARAM \rangle) \langle NTYPEFUN \rangle \{\langle NNEXT \rangle\} \langle NDEF \rangle$
+    \item $\langle NDEF \rangle \rightarrow \varepsilon$
+    \item $\langle NDEFPARAM \rangle \rightarrow ID : \langle NTYPE \rangle \langle NDEFCOMMA \rangle$
+    \item $\langle NDEFPARAM \rangle \rightarrow \varepsilon$
+    \item $\langle NTYPE \rangle \rightarrow I32$
+    \item $\langle NTYPE \rangle \rightarrow F64$
+    \item $\langle NTYPE \rangle \rightarrow []u8$
+    \item $\langle NTYPE \rangle \rightarrow ?I32$
+    \item $\langle NTYPE \rangle \rightarrow ?F64$
+    \item $\langle NTYPE \rangle \rightarrow ?[]u8$
+    \item $\langle NTYPEFUN \rangle \rightarrow \langle NTYPE \rangle$
+    \item $\langle NTYPEFUN \rangle \rightarrow void$
+    \item $\langle NDEFCOMMA \rangle \rightarrow ,\langle NDEFPARAM \rangle$
+    \item $\langle NDEFCOMMA \rangle \rightarrow \varepsilon$
+    \item $\langle NNEXT \rangle \rightarrow \langle NCOMMAND \rangle$
+    \item $\langle NNEXT \rangle \rightarrow \varepsilon$
+    \item $\langle NCOMMAND \rangle \rightarrow if(\langle NEXPRESS \rangle)\langle NIDNULL \rangle\{\langle NNEXT \rangle\}\langle NELSE \rangle\langle NNEXT \rangle$
+    \item $\langle NCOMMAND \rangle \rightarrow while(\langle NEXPRESS \rangle)\langle NIDNULL \rangle\{\langle NNEXT \rangle\}\langle NNEXT \rangle$
+    \item $\langle NCOMMAND \rangle \rightarrow return\langle NRETVALUE \rangle;$
+    \item $\langle NCOMMAND \rangle \rightarrow \langle NVAR \rangle\langle NNEXT \rangle$
+    \item $\langle NCOMMAND \rangle \rightarrow ID\langle NSUPPORT \rangle;\langle NNEXT \rangle$
+    \item $\langle NRETVALUE \rangle \rightarrow \langle NVALUE \rangle$
+    \item $\langle NRETVALUE \rangle \rightarrow \varepsilon$
+    \item $\langle NSUPPORT \rangle \rightarrow (\langle NPARAM \rangle)$
+    \item $\langle NSUPPORT \rangle \rightarrow =\langle NVALUE \rangle$
+    \item $\langle NVAR \rangle \rightarrow \text{const } ID : \langle NTYPEVAR \rangle = \langle NVALUE \rangle;$
+    \item $\langle NVAR \rangle \rightarrow \text{var } ID : \langle NTYPEVAR \rangle = \langle NVALUE \rangle;$
+    \item $\langle NTYPEVAR \rangle \rightarrow :\langle NTYPE \rangle$
+    \item $\langle NTYPEVAR \rangle \rightarrow \varepsilon$
+    \item $\langle NVALUE \rangle \rightarrow \langle NVALUEX \rangle\langle NSIGN \rangle\langle NVALUEX \rangle$
+    \item $\langle NVALUE \rangle \rightarrow \langle NVALUEX \rangle$
+    \item $\langle NVALUE \rangle \rightarrow null$
+    \item $\langle NVALUEX \rangle \rightarrow (\langle NVALUE \rangle)$
+    \item $\langle NVALUEX \rangle \rightarrow ID$
+    \item $\langle NVALUEX \rangle \rightarrow ID(\langle NPARAM \rangle)$
+    \item $\langle NPARAM \rangle \rightarrow ID\langle NCOMMA \rangle$
+    \item $\langle NPARAM \rangle \rightarrow \varepsilon$
+    \item $\langle NCOMMA \rangle \rightarrow ,\langle NPARAM \rangle$
+    \item $\langle NCOMMA \rangle \rightarrow \varepsilon$
+    \item $\langle NEXPRESS \rangle \rightarrow ID$
+    \item $\langle NEXPRESS \rangle \rightarrow \langle NVALUE \rangle\langle NCOMPSIGN \rangle\langle NVALUE \rangle$
+    \item $\langle NIDNULL \rangle \rightarrow |ID|$
+    \item $\langle NSIGN \rangle \rightarrow +$
+    \item $\langle NSIGN \rangle \rightarrow -$
+    \item $\langle NSIGN \rangle \rightarrow *$
+    \item $\langle NSIGN \rangle \rightarrow /$
+    \item $\langle NCOMPSIGN \rangle \rightarrow ==$
+    \item $\langle NCOMPSIGN \rangle \rightarrow !=$
+    \item $\langle NCOMPSIGN \rangle \rightarrow >$
+    \item $\langle NCOMPSIGN \rangle \rightarrow >=$
+    \item $\langle NCOMPSIGN \rangle \rightarrow <=$
+    \item $\langle NCOMPSIGN \rangle \rightarrow <$
+    \item $\langle NELSE \rangle \rightarrow else\{\langle NNEXT \rangle\}$
+    \item $\langle NELSE \rangle \rightarrow \varepsilon$
+\end{enumerate}
+
+\subsection{LL-Tabuľka}
+Konkrétna LL-tabuľka bude doplnená v ďalšej verzii dokumentácie. V tejto chvíli zhromažďujeme výsledky validácie, aby bolo možné tabuľku prezentovať v presnej a konečnej podobe.
+
+\subsection{Precedenčná tabuľka}
+Podobne ako pri LL-tabuľke, kompletná precedenčná tabuľka bude zaradená po finalizácii verifikácie všetkých pravidiel. Textová podoba pravidiel je už implementovaná v kóde a bude spracovaná do prehľadnej tabuľky.
+
+\subsection{Konečný automat}
+Grafické znázornenie konečného automatu pripravujeme pre budúcu revíziu dokumentácie. V tejto verzii poskytujeme len opis spracovania tokenov, aby zostal dokument konzistentný.
+
+\end{document}
