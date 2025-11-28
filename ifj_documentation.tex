@@ -79,19 +79,19 @@ Aktuálně používaná LL gramatika je uvedena níže. V této verzi dokumentu 
     \item Prolog $\rightarrow$ \texttt{ident("import")} \texttt{STRING("ifj25")} \texttt{ident("for")} \texttt{KEYWORD(Ifj)} EOL
     \item Class $\rightarrow$ \texttt{class} \texttt{ident("Program")} \{ EOL FuncList \}
     \item FuncList $\rightarrow$ FuncDecl FuncList
-    \item FuncList $\rightarrow$ \varepsilon
+    \item FuncList $\rightarrow$ $\varepsilon$
     \item FuncDecl $\rightarrow$ \texttt{static} ident FuncHead Block EOL
     \item FuncHead $\rightarrow$ ( ParamListOpt )
     \item FuncHead $\rightarrow$ = ( ident )
-    \item FuncHead $\rightarrow$ \varepsilon
+    \item FuncHead $\rightarrow$ $\varepsilon$
     \item ParamListOpt $\rightarrow$ ParamList
-    \item ParamListOpt $\rightarrow$ \varepsilon
+    \item ParamListOpt $\rightarrow$ $\varepsilon$
     \item ParamList $\rightarrow$ ident ParamTail
     \item ParamTail $\rightarrow$ , ident ParamTail
-    \item ParamTail $\rightarrow$ \varepsilon
+    \item ParamTail $\rightarrow$ $\varepsilon$
     \item Block $\rightarrow$ \{ EOL StmtList \}
     \item StmtList $\rightarrow$ Stmt EOL StmtList
-    \item StmtList $\rightarrow$ \varepsilon
+    \item StmtList $\rightarrow$ $\varepsilon$
     \item Stmt $\rightarrow$ \texttt{var} ident
     \item Stmt $\rightarrow$ \texttt{if} ( EXPR ) Block \texttt{else} Block
     \item Stmt $\rightarrow$ \texttt{while} ( EXPR ) Block
@@ -103,10 +103,10 @@ Aktuálně používaná LL gramatika je uvedena níže. V této verzi dokumentu 
     \item FuncName $\rightarrow$ \texttt{Ifj} . ident
     \item FuncName $\rightarrow$ ident
     \item ArgListOpt $\rightarrow$ ArgList
-    \item ArgListOpt $\rightarrow$ \varepsilon
+    \item ArgListOpt $\rightarrow$ $\varepsilon$
     \item ArgList $\rightarrow$ Term ArgTail
     \item ArgTail $\rightarrow$ , Term ArgTail
-    \item ArgTail $\rightarrow$ \varepsilon
+    \item ArgTail $\rightarrow$ $\varepsilon$
     \item Term $\rightarrow$ \texttt{num\_lit}
     \item Term $\rightarrow$ \texttt{str\_lit}
     \item Term $\rightarrow$ \texttt{null}
@@ -115,28 +115,28 @@ Aktuálně používaná LL gramatika je uvedena níže. V této verzi dokumentu 
     \item EXPR $\rightarrow$ LogicOr
     \item LogicOr $\rightarrow$ LogicAnd LogicOrTail
     \item LogicOrTail $\rightarrow$ \texttt{||} LogicAnd LogicOrTail
-    \item LogicOrTail $\rightarrow$ \varepsilon
+    \item LogicOrTail $\rightarrow$ $\varepsilon$
     \item LogicAnd $\rightarrow$ Equality LogicAndTail
     \item LogicAndTail $\rightarrow$ \texttt{\&\&} Equality LogicAndTail
-    \item LogicAndTail $\rightarrow$ \varepsilon
+    \item LogicAndTail $\rightarrow$ $\varepsilon$
     \item Equality $\rightarrow$ IsExpr EqualityTail
     \item EqualityTail $\rightarrow$ $(== \mid !=)$ IsExpr EqualityTail
-    \item EqualityTail $\rightarrow$ \varepsilon
+    \item EqualityTail $\rightarrow$ $\varepsilon$
     \item IsExpr $\rightarrow$ Relational IsExprTail
     \item IsExprTail $\rightarrow$ \texttt{is} TypeKeyword IsExprTail
-    \item IsExprTail $\rightarrow$ \varepsilon
+    \item IsExprTail $\rightarrow$ $\varepsilon$
     \item TypeKeyword $\rightarrow$ \texttt{KEYWORD(String)}
     \item TypeKeyword $\rightarrow$ \texttt{KEYWORD(Num)}
     \item TypeKeyword $\rightarrow$ \texttt{KEYWORD(Null)}
     \item Relational $\rightarrow$ Additive RelationalTail
     \item RelationalTail $\rightarrow$ $(< \mid <= \mid > \mid >=)$ Additive RelationalTail
-    \item RelationalTail $\rightarrow$ \varepsilon
+    \item RelationalTail $\rightarrow$ $\varepsilon$
     \item Additive $\rightarrow$ Multiplicative AdditiveTail
     \item AdditiveTail $\rightarrow$ $(+ \mid -)$ Multiplicative AdditiveTail
-    \item AdditiveTail $\rightarrow$ \varepsilon
+    \item AdditiveTail $\rightarrow$ $\varepsilon$
     \item Multiplicative $\rightarrow$ Unary MultiplicativeTail
     \item MultiplicativeTail $\rightarrow$ $( * \mid / \mid \% )$ Unary MultiplicativeTail
-    \item MultiplicativeTail $\rightarrow$ \varepsilon
+    \item MultiplicativeTail $\rightarrow$ $\varepsilon$
     \item Unary $\rightarrow$ $( ! \mid + \mid - )$ Unary
     \item Unary $\rightarrow$ Primary
     \item Primary $\rightarrow$ \texttt{num\_lit}
@@ -147,7 +147,7 @@ Aktuálně používaná LL gramatika je uvedena níže. V této verzi dokumentu 
     \item Primary $\rightarrow$ ident PrimaryIdentTail
     \item Primary $\rightarrow$ \texttt{Ifj} . ident ( ArgListOpt )
     \item PrimaryIdentTail $\rightarrow$ ( ArgListOpt )
-    \item PrimaryIdentTail $\rightarrow$ \varepsilon
+    \item PrimaryIdentTail $\rightarrow$ $\varepsilon$
 \end{enumerate}
 
 \subsection{LL tabulka}
