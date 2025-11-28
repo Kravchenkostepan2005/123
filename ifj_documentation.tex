@@ -72,6 +72,36 @@ Rozpoznávané lexémy:
 
 Při výskytu neplatného znaku (\texttt{ERROR\_STATE}), nedokončené escape sekvence nebo neočekávaného EOF se token resetuje, nastaví se \texttt{token->type = ERROR} a kód chyby (\texttt{LEXICAL\_ERROR}/\texttt{COMPILER\_ERROR}) se okamžitě propaguje do parseru. Díky tomu dostává syntaktický analyzátor konzistentní proud tokenů a může se spolehnout, že chyby jsou zachyceny už během lexikální fáze.
 
+\subsection{Syntaktická analýza}
+Parser je implementován jako rekurzivní sestup v souboru \texttt{parser.c}. Kořenová funkce \texttt{parse\_topDown()} staví AST typu \texttt{Node} podle pravidel z kapitoly \ref{sec:grammar}. Každý neterminál má odpovídající funkci s příponou \texttt{\_rule()} (\texttt{prolog\_rule}, \texttt{class\_rule}, \texttt{func\_list\_rule}, \texttt{expr\_rule} atd.). Pomocná dvojice \texttt{read\_buffer()} / \texttt{write\_buffer()} drží jednoprveňový lookahead, \texttt{skip\_EOL\_WHITESPACE()} umí přeskakovat volitelné konce řádků a mezery a \texttt{error\_handler()} okamžitě vrací lexikální chyby.
+
+V srdci parseru stojí generická funkce \texttt{check\_correct\_rule()}, která dostává pole očekávaných terminálů (\texttt{Token\_type terminals[]}), případně seznam neterminálů k rekurzivnímu vyhodnocení (\texttt{Nonterminal\_type nonterminals[]}) a volitelně pole klíčových slov. Speciální symbol \texttt{NaT} značí, že má být zavoláno další pravidlo přes \texttt{call\_rule()}. Zlaté pravidlo je, že WHITESPACE/EOL lze označit jako \texttt{WHITESPACE\_EPSILON}/\texttt{EOL\_EPSILON}, aby nebylo nutné psát duplicity. AST se buduje pomocí \texttt{insert\_child()}, přičemž terminály jsou vkládány jako uzly s \texttt{nonterminal = NaN}.
+
+Pravidla pokrývají prolog (\texttt{import "ifj25" for Ifj}), deklaraci třídy \texttt{class Program \{ ... \}}, seznam statických funkcí, parametry (\texttt{PARAMLIST} a \texttt{PARAMTAIL}), bloky, sekvence příkazů i jednotlivé konstrukce:
+\begin{itemize}
+    \item \textbf{Výroky}: deklarace \texttt{var}, příkazy \texttt{if}/\texttt{while}/\texttt{return}, přiřazení na lokální i globální identifikátory, volání metod \texttt{Ifj.foo()} a vnořené bloky.
+    \item \textbf{Výrazy}: hierarchie \texttt{LOGICOR} $\rightarrow$ \texttt{LOGICAND} $\rightarrow$ \texttt{EQUALITY} $\rightarrow$ \texttt{ISEXPR} $\rightarrow$ \texttt{RELATIONAL} $\rightarrow$ \texttt{ADDITIVE} $\rightarrow$ \texttt{MULTIPLICATIVE} $\rightarrow$ \texttt{UNARY} $\rightarrow$ \texttt{PRIMARY} kopíruje precedenci operátorů. Volitelné části zajišťují neterminály \texttt{LOGICORTAIL}, \texttt{ARGTAIL}, \texttt{PRIMARYIDENTTAIL} atd.
+\end{itemize}
+
+Výsledkem je deterministický parser, který po chybě vrací \texttt{SYNTACTICAL\_ERROR} nebo příslušný kód z lexikální fáze.
+
+\subsection{Zpracování výrazů pomocí precedenční logiky}
+Výrazy je také možné vyhodnocovat precedenčním analyzátorem z \texttt{precedencna.c}. Funkce \texttt{precProces()} používá zásobník \texttt{StackNode}, přidává/odstraňuje tokeny podle tabulky precedencí a zaznamenává použitá pravidla do struktury tokenu, aby na ně mohl navázat generátor kódu. Po celou dobu probíhá typová kontrola, takže neplatné kombinace operátorů jsou zachyceny dříve, než dojde na generování kódu.
+
+\subsection{Generátor kódu}
+Generování kódu zajišťuje \texttt{codeGen()} v \texttt{interpret.c}. Funkce iteruje přes seznam tokenů a podle typu instrukce volá specializované obsluhy, které tisknou trojadresný kód pro interpret IFJcode24. Pro řízení vnořených konstrukcí (\texttt{if}, \texttt{while}) využívá zásobník \texttt{StackNode}, pracuje s pravidly precedenční logiky uloženými v položce \texttt{rules} a zajišťuje konzistentní výstup pro všechny podporované příkazy.
+
+\subsection{Sémantická analýza}
+Sémantická fáze sídlí v \texttt{semantic.c}. Kontext \texttt{SemanticContext} obsahuje globální a aktivní symbolickou tabulku; \texttt{semantic\_init()} je zakládá pomocí \texttt{symtable\_create()}, \texttt{semantic\_cleanup()} vše korektně uvolní. Rozsahy obsluhují \texttt{enter\_scope()} a \texttt{exit\_scope()}, které tabulky řetězí přes ukazatel \texttt{parent} a přidělují je jednotlivým uzlům AST.
+
+Symboly se vkládají výhradně přes \texttt{insert\_class\_member\_symbol()}, která kopíruje jméno (\texttt{xstrdup()}), nastavuje \texttt{SymbolType} (třída, metoda, getter, setter, lokální proměnná) a hlídá znovudeklarace. Predikáty \texttt{is\_global\_variable()} a \texttt{is\_builtin\_function()} rozpoznají speciální identifikátory, \texttt{validate\_builtin\_function()} kontroluje aritu vestavěných funkcí IFJ. Počty parametrů/argumentů zjišťují \texttt{count\_identifier\_parameters()} a \texttt{count\_arguments()}.
+
+Typy literálů vrací \texttt{get\_token\_data\_type()}, pravidla kompatibility udržuje \texttt{check\_literal\_type\_compatibility()}. Funkce \texttt{analyze\_expression()} tak snadno zjistí, zda lze daný výraz vyhodnotit, ověří existenci proměnných (\texttt{analyze\_variable\_reference()}), korektnost volání (\texttt{analyze\_function\_call()}) a validitu porovnání s \texttt{is}.
+
+Analýza třídy \texttt{Program} probíhá ve dvou průchodech: \texttt{analyze\_class()} spolu s \texttt{analyze\_class\_body()} nejprve registruje deklarace (\texttt{analyze\_method}, \texttt{analyze\_getter}, \texttt{analyze\_setter}), poté se vstoupí do nového scope a kontrolují se těla (\texttt{analyze\_method\_body}, \texttt{analyze\_getter\_body}, \texttt{analyze\_setter\_body}). Jednotlivé příkazy kontrolují \texttt{analyze\_var\_declaration()}, \texttt{analyze\_assignment()}, \texttt{analyze\_if\_statement()}, \texttt{analyze\_while\_statement()} a \texttt{analyze\_return\_statement()}.
+
+Vstupní bod \texttt{semantic\_analyze()} vytvoří kontext, spustí \texttt{analyze\_node()} a po úspěchu ověří přítomnost funkce \texttt{main()} bez parametrů (\texttt{check\_main\_function()}). Všechny chyby odpovídají specifikaci (\texttt{SEMANTIC\_UNDEFINED\_ERROR}, \texttt{SEMANTIC\_REDEFINITION\_ERROR}, \texttt{SEMANTIC\_PARAM\_COUNT\_ERROR}, \texttt{SEMANTIC\_TYPE\_ERROR}, \texttt{SEMANTIC\_OTHER\_ERROR}, \texttt{INTERNAL\_ERROR}).
+
 \subsection{LL tabulka}
 Konkrétní LL tabulka bude doplněna v další verzi dokumentace. V současnosti shromažďujeme výsledky validace, aby bylo možné tabulku prezentovat v přesné a finální podobě.
 
