@@ -1,0 +1,114 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[czech]{babel}
+\usepackage{amsmath}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+\setlist{itemsep=2pt,topsep=4pt}
+
+\title{Dokumentace k projektu IFJ/IAL}
+\author{xpocarj00 \\ xuherto00 \\ xchalo21 \\ xkravc03}
+\date{Listopad 2025}
+
+\begin{document}
+
+\maketitle
+
+Dokumentace k projektu z předmětu IFJ a IAL\\
+Implementace překladače pro jazyk IFJ24\\
+Tým xpocarj00, xuherto00, xchalo21, xkravc03, varianta TRP-izp\\
+Každý člen přispěl 25\% práce.
+
+\tableofcontents
+\newpage
+
+\section{Rozdělení práce mezi členy týmu}
+
+\subsection{xpocarj00 (25\%)}
+\begin{itemize}
+    \item Lexikální analýza
+    \item Generátor kódu
+\end{itemize}
+
+\subsection{xuherto00 (25\%)}
+\begin{itemize}
+    \item Syntaktická analýza
+    \item Precedenční logika
+    \item Tabulka symbolů
+\end{itemize}
+
+\subsection{xchalo21 (25\%)}
+\begin{itemize}
+    \item Tabulka symbolů
+    \item Generátor kódu
+\end{itemize}
+
+\subsection{xkravc03 (25\%)}
+\begin{itemize}
+    \item Testovací soubory
+    \item Makefile
+    \item Dokumentace
+    \item Pomocné struktury seznam a zásobník
+\end{itemize}
+
+\section{Způsob řešení jednotlivých částí projektu}
+
+\subsection{Lexikální analýza}
+Skener je kompletně popsán ve dvojici souborů \texttt{scanner.c}/\texttt{scanner.h}. Základní jednotkou je struktura \texttt{Token}, která kombinuje typ (\texttt{Token\_type}) s uniem \texttt{Token\_content} držícím čísla, řetězce nebo ukazatel na znaky. Pomocné funkce \texttt{token\_assign\_char()}, \texttt{token\_remove\_last\_char()}, \texttt{save\_int()}, \texttt{save\_float()} a \texttt{token\_reset()} řeší bezpečné přidávání znaků, odstraňování posledního znaku a převod textového bufferu na číselnou reprezentaci. Při chybě alokace nebo neplatné sekvenci se přes \texttt{set\_error()} nastaví typ \texttt{ERROR} a návratový kód \texttt{LEXICAL\_ERROR}/\texttt{COMPILER\_ERROR}.
+
+Vlastní lexikální analýzu implementuje deterministický konečný automat \texttt{state\_machine()}. Seznam stavů vyjmenovává \texttt{enum State}: základní \texttt{START}, větvící \texttt{CHECK\_COMMENT}/\texttt{END\_COMMENT}/\texttt{ADD\_DEPTH} pro komentáře, \texttt{IDENTIFIER\_OR\_KEYWORD}, \texttt{INTEGER\_CHECK}, \texttt{INTEGER\_HEXADECIMAL}, \texttt{FLOAT\_CHECK\_*}, \texttt{QUOTES\_STATE}, řetězové stavy \texttt{STRING\_STATE}, \texttt{ML\_STRING\_*}, \texttt{ESCAPE\_SEQUENCE}, \texttt{ESCAPE\_HEXADECIMAL}, \texttt{UNDERSCORE\_STATE}/\texttt{GLOBAL\_IDENTIFIER\_STATE} atd. Každý krok čte znak z \texttt{stdin} přes \texttt{fgetc()}, případně jej vrací zpět pomocí \texttt{ungetc()}, pokud do lexému nepatří. Funkce \texttt{get\_token()} vždy vytvoří čerstvý token, nastaví jej pomocí \texttt{state\_machine()} a vrátí volajícímu; \texttt{free\_token()} řeší uvolnění paměti.
+
+Rozpoznávané lexémy:
+\begin{itemize}
+    \item \textbf{Klíčová slova a identifikátory}: Tabulka \texttt{keyword\_table} obsahuje 17 literálů (např. \texttt{"Ifj"}, \texttt{"import"}, \texttt{"Num"}, \texttt{"Null"}). Stav \texttt{IDENTIFIER\_OR\_KEYWORD} čte písmena/cifry/`\texttt{\_}` a po ukončení lexému porovná řetězec s tabulkou. Globální identifikátory začínající `\_\_` obsluhuje dvojice \texttt{UNDERSCORE\_STATE} $\rightarrow$ \texttt{GLOBAL\_IDENTIFIER\_STATE}.
+    \item \textbf{Čísla}: \texttt{INTEGER\_CHECK} pracuje s celými literály, rozpoznává prefix `0x` pro hex čísla (\texttt{INTEGER\_HEXADECIMAL}) a přechází do \texttt{FLOAT\_CHECK\_DECIMAL} a \texttt{FLOAT\_CHECK\_EXPONENT}, pokud najde tečku nebo exponent. Po uzavření lexému se obsah bufferu uloží do \texttt{data.integer} nebo \texttt{data.floating\_point}.
+    \item \textbf{Řetězce}: Stav \texttt{QUOTES\_STATE} spouští zpracování uvozovek. Jednořádkové literály používají \texttt{STRING\_STATE} s podporou escape sekvencí (\texttt{\textbackslash{}n}, \texttt{\textbackslash{}t}, \texttt{\textbackslash{}xhh}). Trojité uvozovky aktivují \texttt{ML\_STRING\_STATE}, které udržuje počty uvozovek (\texttt{ML\_STRING\_QUOTE}) i ořezávání odsazení po každém řádku (\texttt{ML\_STRING\_WHITESPACE\_SKIP} a \texttt{ML\_STRING\_WHITESPACE\_SKIP\_AFTER\_QUOTES}). Funkce \texttt{token\_remove\_last\_char()} slouží k odstranění nadbytečných mezer a koncových znaků.
+    \item \textbf{Operátory}: Jednoznakové symboly (\texttt{+}, \texttt{-}, \texttt{*}, \texttt{/}, závorky, složené závorky, čárka, tečka) se vracejí přímo ze stavu \texttt{START}. Složené varianty (\texttt{<=}, \texttt{>=}, \texttt{==}, \texttt{!=}) řeší \texttt{EXTENSION}. Výrazy používají typy \texttt{ADDITION}, \texttt{SUBTRACTION}, \texttt{MULTIPLICATION}, \texttt{DIVISION}, \texttt{COMPARISON}, \texttt{NOT\_EQUAL} atd.
+    \item \textbf{Komentáře a mezery}: \texttt{CHECK\_COMMENT}/\texttt{END\_COMMENT} rozlišují \texttt{//} a \texttt{/* */}. Díky stavu \texttt{ADD\_DEPTH} jsou podporované i vnořené blokové komentáře; po dokončení se vrací \texttt{WHITESPACE} nebo \texttt{EOL}. Stav \texttt{SPACE\_SKIP} přeskakuje mezery a tabulátory mezi lexémy.
+\end{itemize}
+
+Při výskytu neplatného znaku (\texttt{ERROR\_STATE}), nedokončené escape sekvence nebo neočekávaného EOF se token resetuje, nastaví se \texttt{token->type = ERROR} a kód chyby (\texttt{LEXICAL\_ERROR}/\texttt{COMPILER\_ERROR}) se okamžitě propaguje do parseru. Díky tomu dostává syntaktický analyzátor konzistentní proud tokenů a může se spolehnout, že chyby jsou zachyceny už během lexikální fáze.
+
+\subsection{Syntaktická analýza}
+Parser je implementován jako rekurzivní sestup v souboru \texttt{parser.c}. Kořenová funkce \texttt{parse\_topDown()} staví AST typu \texttt{Node} podle pravidel z kapitoly \ref{sec:grammar}. Každý neterminál má odpovídající funkci s příponou \texttt{\_rule()} (\texttt{prolog\_rule}, \texttt{class\_rule}, \texttt{func\_list\_rule}, \texttt{expr\_rule} atd.). Pomocná dvojice \texttt{read\_buffer()} / \texttt{write\_buffer()} drží jednoprveňový lookahead, \texttt{skip\_EOL\_WHITESPACE()} umí přeskakovat volitelné konce řádků a mezery a \texttt{error\_handler()} okamžitě vrací lexikální chyby.
+
+V srdci parseru stojí generická funkce \texttt{check\_correct\_rule()}, která dostává pole očekávaných terminálů (\texttt{Token\_type terminals[]}), případně seznam neterminálů k rekurzivnímu vyhodnocení (\texttt{Nonterminal\_type nonterminals[]}) a volitelně pole klíčových slov. Speciální symbol \texttt{NaT} značí, že má být zavoláno další pravidlo přes \texttt{call\_rule()}. Zlaté pravidlo je, že WHITESPACE/EOL lze označit jako \texttt{WHITESPACE\_EPSILON}/\texttt{EOL\_EPSILON}, aby nebylo nutné psát duplicity. AST se buduje pomocí \texttt{insert\_child()}, přičemž terminály jsou vkládány jako uzly s \texttt{nonterminal = NaN}.
+
+Pravidla pokrývají prolog (\texttt{import "ifj25" for Ifj}), deklaraci třídy \texttt{class Program \{ ... \}}, seznam statických funkcí, parametry (\texttt{PARAMLIST} a \texttt{PARAMTAIL}), bloky, sekvence příkazů i jednotlivé konstrukce:
+\begin{itemize}
+    \item \textbf{Výroky}: deklarace \texttt{var}, příkazy \texttt{if}/\texttt{while}/\texttt{return}, přiřazení na lokální i globální identifikátory, volání metod \texttt{Ifj.foo()} a vnořené bloky.
+    \item \textbf{Výrazy}: hierarchie \texttt{LOGICOR} $\rightarrow$ \texttt{LOGICAND} $\rightarrow$ \texttt{EQUALITY} $\rightarrow$ \texttt{ISEXPR} $\rightarrow$ \texttt{RELATIONAL} $\rightarrow$ \texttt{ADDITIVE} $\rightarrow$ \texttt{MULTIPLICATIVE} $\rightarrow$ \texttt{UNARY} $\rightarrow$ \texttt{PRIMARY} kopíruje precedenci operátorů. Volitelné části zajišťují neterminály \texttt{LOGICORTAIL}, \texttt{ARGTAIL}, \texttt{PRIMARYIDENTTAIL} atd.
+\end{itemize}
+
+Výsledkem je deterministický parser, který po chybě vrací \texttt{SYNTACTICAL\_ERROR} nebo příslušný kód z lexikální fáze.
+
+\subsection{Zpracování výrazů pomocí precedenční logiky}
+Výrazy je také možné vyhodnocovat precedenčním analyzátorem z \texttt{precedencna.c}. Funkce \texttt{precProces()} používá zásobník \texttt{StackNode}, přidává/odstraňuje tokeny podle tabulky precedencí a zaznamenává použitá pravidla do struktury tokenu, aby na ně mohl navázat generátor kódu. Po celou dobu probíhá typová kontrola, takže neplatné kombinace operátorů jsou zachyceny dříve, než dojde na generování kódu.
+
+\subsection{Generátor kódu}
+Generování kódu zajišťuje \texttt{codeGen()} v \texttt{interpret.c}. Funkce iteruje přes seznam tokenů a podle typu instrukce volá specializované obsluhy, které tisknou trojadresný kód pro interpret IFJcode24. Pro řízení vnořených konstrukcí (\texttt{if}, \texttt{while}) využívá zásobník \texttt{StackNode}, pracuje s pravidly precedenční logiky uloženými v položce \texttt{rules} a zajišťuje konzistentní výstup pro všechny podporované příkazy.
+
+\subsection{Sémantická analýza}
+Sémantická fáze sídlí v \texttt{semantic.c}. Kontext \texttt{SemanticContext} obsahuje globální a aktivní symbolickou tabulku; \texttt{semantic\_init()} je zakládá pomocí \texttt{symtable\_create()}, \texttt{semantic\_cleanup()} vše korektně uvolní. Rozsahy obsluhují \texttt{enter\_scope()} a \texttt{exit\_scope()}, které tabulky řetězí přes ukazatel \texttt{parent} a přidělují je jednotlivým uzlům AST.
+
+Symboly se vkládají výhradně přes \texttt{insert\_class\_member\_symbol()}, která kopíruje jméno (\texttt{xstrdup()}), nastavuje \texttt{SymbolType} (třída, metoda, getter, setter, lokální proměnná) a hlídá znovudeklarace. Predikáty \texttt{is\_global\_variable()} a \texttt{is\_builtin\_function()} rozpoznají speciální identifikátory, \texttt{validate\_builtin\_function()} kontroluje aritu vestavěných funkcí IFJ. Počty parametrů/argumentů zjišťují \texttt{count\_identifier\_parameters()} a \texttt{count\_arguments()}.
+
+Typy literálů vrací \texttt{get\_token\_data\_type()}, pravidla kompatibility udržuje \texttt{check\_literal\_type\_compatibility()}. Funkce \texttt{analyze\_expression()} tak snadno zjistí, zda lze daný výraz vyhodnotit, ověří existenci proměnných (\texttt{analyze\_variable\_reference()}), korektnost volání (\texttt{analyze\_function\_call()}) a validitu porovnání s \texttt{is}.
+
+Analýza třídy \texttt{Program} probíhá ve dvou průchodech: \texttt{analyze\_class()} spolu s \texttt{analyze\_class\_body()} nejprve registruje deklarace (\texttt{analyze\_method}, \texttt{analyze\_getter}, \texttt{analyze\_setter}), poté se vstoupí do nového scope a kontrolují se těla (\texttt{analyze\_method\_body}, \texttt{analyze\_getter\_body}, \texttt{analyze\_setter\_body}). Jednotlivé příkazy kontrolují \texttt{analyze\_var\_declaration()}, \texttt{analyze\_assignment()}, \texttt{analyze\_if\_statement()}, \texttt{analyze\_while\_statement()} a \texttt{analyze\_return\_statement()}.
+
+Vstupní bod \texttt{semantic\_analyze()} vytvoří kontext, spustí \texttt{analyze\_node()} a po úspěchu ověří přítomnost funkce \texttt{main()} bez parametrů (\texttt{check\_main\_function()}). Všechny chyby odpovídají specifikaci (\texttt{SEMANTIC\_UNDEFINED\_ERROR}, \texttt{SEMANTIC\_REDEFINITION\_ERROR}, \texttt{SEMANTIC\_PARAM\_COUNT\_ERROR}, \texttt{SEMANTIC\_TYPE\_ERROR}, \texttt{SEMANTIC\_OTHER\_ERROR}, \texttt{INTERNAL\_ERROR}).
+
+\subsection{LL tabulka}
+Konkrétní LL tabulka bude doplněna v další verzi dokumentace. V současnosti shromažďujeme výsledky validace, aby bylo možné tabulku prezentovat v přesné a finální podobě.
+
+\subsection{Precedenční tabulka}
+Stejně jako u LL tabulky bude kompletní precedenční tabulka zařazena po finalizaci verifikace všech pravidel. Textová podoba pravidel je již implementována v kódu a bude zpracována do přehledné tabulky.
+
+\subsection{Konečný automat}
+Grafické znázornění konečného automatu je k dispozici v příloze \texttt{plantuml\_export.pdf}. V této verzi dokumentu poskytujeme stručný popis zpracování tokenů, zatímco detailní diagram lze nalézt v uvedeném souboru.
+
+\end{document}
